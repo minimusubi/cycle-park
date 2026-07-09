@@ -1,0 +1,162 @@
+[
+  {
+    "id": "lot-a",
+    "name": "Ikebukuro Station East Entrance Second Bicycle Parking Lot",
+    "address": "2 Chome-25-2 Minamiikebukuro, Toshima City, Tokyo 171-0022, Japan",
+    "latitude": 35.727491395578326,
+    "longitude": 139.71325134022126,
+    "country": "Japan",
+    "hoursOfOperation": "24 Hours",
+    "paymentMethods": [
+      "cash"
+    ],
+    "rates": [
+      {
+        "id": "bottom-rack",
+        "name": "Standard Rack",
+        "freePeriodMinutes": 0,
+        "chargeSteps": [
+          {
+            "durationMinutes": 480,
+            "rate": 100,
+            "isRecurring": true
+          }
+        ]
+      }
+    ],
+    "photoUrl": "https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=500&q=80",
+    "lastUpdated": "2026-07-09T04:28:58.362Z"
+  },
+  {
+    "id": "lot-b",
+    "name": "Sunshine City Bicycle Parking",
+    "address": "3-1-1 Higashiikebukuro, Toshima City, Tokyo, Japan",
+    "latitude": 35.7291,
+    "longitude": 139.7191,
+    "country": "Japan",
+    "hoursOfOperation": "07:00 - 23:30",
+    "paymentMethods": [
+      "cash",
+      "credit",
+      "paypay"
+    ],
+    "rates": [
+      {
+        "id": "standard-rack",
+        "name": "Standard Rack",
+        "freePeriodMinutes": 0,
+        "chargeSteps": [
+          {
+            "durationMinutes": 240,
+            "rate": 100,
+            "isRecurring": true
+          }
+        ]
+      }
+    ],
+    "photoUrl": "https://images.unsplash.com/photo-1508962914676-134849a727f0?auto=format&fit=crop&w=500&q=80",
+    "lastUpdated": "2026-07-06T05:48:53.606Z"
+  },
+  {
+    "id": "lot-c",
+    "name": "Powell St BART Station Locker",
+    "address": "899 Market St, San Francisco, CA 94103, USA",
+    "latitude": 37.7844,
+    "longitude": -122.408,
+    "country": "United States",
+    "hoursOfOperation": "24 Hours",
+    "paymentMethods": [
+      "credit",
+      "applepay",
+      "googlepay"
+    ],
+    "rates": [
+      {
+        "id": "secure-locker",
+        "name": "Secure Locker",
+        "freePeriodMinutes": 60,
+        "chargeSteps": [
+          {
+            "durationMinutes": 120,
+            "rate": 1.5,
+            "isRecurring": true
+          }
+        ]
+      },
+      {
+        "id": "standard-hoop",
+        "name": "Standard Hoop (Outdoor)",
+        "freePeriodMinutes": 1440,
+        "chargeSteps": [
+          {
+            "durationMinutes": 1440,
+            "rate": 0,
+            "isRecurring": true
+          }
+        ]
+      }
+    ],
+    "photoUrl": "https://images.unsplash.com/photo-1541614101331-1a5a3a194e92?auto=format&fit=crop&w=500&q=80",
+    "lastUpdated": "2026-07-06T05:48:53.606Z"
+  },
+  {
+    "id": "lot-1783571149387",
+    "name": "NPC 24H Hareza Tower Bike Locker",
+    "address": "1 Chome-18 Higashiikebukuro, Toshima City, Tokyo 170-0013, Japan",
+    "latitude": 35.73262695957057,
+    "longitude": 139.71583213819693,
+    "country": "Japan",
+    "hoursOfOperation": "24 Hours",
+    "paymentMethods": [
+      "cash"
+    ],
+    "rates": [
+      {
+        "id": "rack-1",
+        "name": "Standard Rack",
+        "freePeriodMinutes": 0,
+        "chargeSteps": [
+          {
+            "durationMinutes": 180,
+            "rate": 100,
+            "isRecurring": true
+          }
+        ]
+      }
+    ],
+    "lastUpdated": "2026-07-09T04:26:07.740Z"
+  },
+  {
+    "id": "lot-1783571754641",
+    "name": "Jinbocho Kosaten Bicycle Parking",
+    "address": "2 Chome-3-10 Kanda Jinbocho, Chiyoda City, Tokyo 101-0051, Japan",
+    "latitude": 35.6957949639144,
+    "longitude": 139.7574653809326,
+    "country": "Japan",
+    "hoursOfOperation": "24 Hours",
+    "paymentMethods": [
+      "cash",
+      "ic"
+    ],
+    "rates": [
+      {
+        "id": "rack-1",
+        "name": "Main Rack",
+        "freePeriodMinutes": 120,
+        "chargeSteps": [
+          {
+            "durationMinutes": 600,
+            "rate": 100,
+            "isRecurring": false
+          },
+          {
+            "durationMinutes": 300,
+            "rate": 100,
+            "isRecurring": true
+          }
+        ]
+      }
+    ],
+    "lastUpdated": "2026-07-09T04:35:54.641Z"
+  }
+]
