@@ -22,6 +22,9 @@
 </template>
 
 <script lang="ts" setup>
+	import * as maplibregl from 'maplibre-gl';
+	import mapLibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
+
 	interface MapPin {
 		id: string;
 		name: string;
@@ -57,10 +60,10 @@
 	const runtimeConfig = useRuntimeConfig();
 	const colorMode = useColorMode();
 	const mapContainer = ref<HTMLElement | null>(null);
-	let map: any = null;
-	let destinationMarker: any = null;
-	let interactiveMarker: any = null;
-	let parkingMarkers: any[] = [];
+	let map: maplibregl.Map | null = null;
+	let destinationMarker: maplibregl.Marker | null = null;
+	let interactiveMarker: maplibregl.Marker | null = null;
+	let parkingMarkers: maplibregl.Marker[] = [];
 
 	const toLngLat = (coords: [number, number]): [number, number] => [
 		coords[1],
@@ -73,11 +76,13 @@
 			runtimeConfig.public.mapDarkStyleUrl || '',
 		);
 		const configuredStyle =
-			darkMode && configuredDarkStyle ?
-				configuredDarkStyle
+			darkMode && configuredDarkStyle ? configuredDarkStyle
 			: darkMode ?
-				lightStyle.replace('/maps/streets-v4/', '/maps/streets-v4-dark/')
-			: lightStyle;
+				lightStyle.replace(
+					'/maps/streets-v4/',
+					'/maps/streets-v4-dark/',
+				)
+			:	lightStyle;
 		const mapTilerKey = String(runtimeConfig.public.mapTilerKey || '');
 
 		if (configuredStyle.includes('{key}')) {
@@ -124,7 +129,7 @@
 		return wrapper;
 	};
 
-	const removeMarker = (marker: any) => {
+	const removeMarker = (marker: maplibregl.Marker | null) => {
 		if (marker) {
 			marker.remove();
 		}
@@ -140,11 +145,7 @@
 			return;
 		}
 
-		const maplibregl = (window as any).maplibregl;
-		if (!maplibregl) {
-			console.error('MapLibre GL JS is not loaded on the window object.');
-			return;
-		}
+		maplibregl.setWorkerUrl(mapLibreWorkerUrl);
 
 		map = new maplibregl.Map({
 			container: mapContainer.value,
@@ -156,11 +157,11 @@
 
 		map.addControl(new maplibregl.NavigationControl(), 'top-right');
 
-		map.on('click', (event: any) => {
+		map.on('click', (event: maplibregl.MapMouseEvent) => {
 			const clickTarget = event.originalEvent?.target;
 			if (
-				clickTarget instanceof Element &&
-				clickTarget.closest('.maplibregl-marker, .maplibregl-popup')
+				clickTarget instanceof Element
+				&& clickTarget.closest('.maplibregl-marker, .maplibregl-popup')
 			) {
 				return;
 			}
@@ -236,8 +237,7 @@
 	);
 
 	const placeInteractiveMarker = (lat: number, lng: number) => {
-		const maplibregl = (window as any).maplibregl;
-		if (!maplibregl || !map) {
+		if (!map) {
 			return;
 		}
 
@@ -255,8 +255,7 @@
 	};
 
 	const renderDestination = () => {
-		const maplibregl = (window as any).maplibregl;
-		if (!maplibregl || !map) {
+		if (!map) {
 			return;
 		}
 
@@ -288,8 +287,7 @@
 	};
 
 	const renderPins = () => {
-		const maplibregl = (window as any).maplibregl;
-		if (!maplibregl || !map) {
+		if (!map) {
 			return;
 		}
 

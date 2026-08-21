@@ -16,6 +16,7 @@
 		"@nuxt/fonts": "^0.14.0",
 		"@nuxt/icon": "^2.0.0",
 		"@nuxtjs/color-mode": "^4.0.0",
+		"maplibre-gl": "^6.4.0",
 		"nuxt": "^4.4.6",
 		"sass-embedded": "^1.89.2"
 	},

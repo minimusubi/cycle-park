@@ -23,20 +23,9 @@ export default defineNuxtConfig({
 						'Find nearby bicycle parking, compare pricing structures, and estimate costs based on duration.',
 				},
 			],
-			link: [
-				{
-					rel: 'stylesheet',
-					href: 'https://unpkg.com/maplibre-gl/dist/maplibre-gl.css',
-				},
-			],
-			script: [
-				{
-					src: 'https://unpkg.com/maplibre-gl/dist/maplibre-gl.js',
-				},
-			],
 		},
 	},
-	css: ['~/styles/global.scss'],
+	css: ['maplibre-gl/dist/maplibre-gl.css', '~/styles/global.scss'],
 	runtimeConfig: {
 		public: {
 			mapStyleUrl:
