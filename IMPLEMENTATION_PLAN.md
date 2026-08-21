@@ -11,7 +11,7 @@ We want to build a self-contained, high-fidelity Nuxt 3/4 web application using 
 The embedded maps now use **MapLibre GL JS** with an OpenMapTiles-compatible style URL. This keeps the app on an open vector-map rendering stack without requiring us to self-host tiles immediately.
 
 - **Map Isolation**: All mapping functionality (rendering pins, drawing popups, picking coordinates, handling map clicks) is encapsulated within `app/components/MapClient.vue`.
-- **Hosted Tile Strategy**: The default style URL is configured through `NUXT_PUBLIC_MAP_STYLE_URL`, with optional `NUXT_PUBLIC_MAPTILER_KEY` replacement for hosted MapTiler/OpenMapTiles styles.
+- **Hosted Tile Strategy**: The default style URL is configured through `NUXT_PUBLIC_MAP_STYLE_URL`, with optional `NUXT_PUBLIC_MAP_TILER_KEY` replacement for hosted MapTiler/OpenMapTiles styles.
 - **Future Self-Hosting Path**: Self-hosting remains a future work item. The likely path is TileServer GL or MapTiler Server serving `.mbtiles` over HTTP, with the Nuxt app pointing `NUXT_PUBLIC_MAP_STYLE_URL` at that server's style JSON endpoint.
 - **Migration Path**: To switch to Google Maps later, we would rewrite the isolated `MapClient.vue` implementation and replace the geocoding provider. The search page, pricing calculator, and admin forms can remain mostly unchanged.
 

@@ -32,7 +32,7 @@ export default defineNuxtConfig({
 				process.env.NUXT_PUBLIC_MAP_STYLE_URL
 				|| 'https://openmaptiles.github.io/osm-bright-gl-style/style-cdn.json',
 			mapDarkStyleUrl: process.env.NUXT_PUBLIC_MAP_DARK_STYLE_URL || '',
-			mapTilerKey: process.env.NUXT_PUBLIC_MAPTILER_KEY || '',
+			mapTilerKey: process.env.NUXT_PUBLIC_MAP_TILER_KEY || '',
 		},
 	},
 	nitro: {
