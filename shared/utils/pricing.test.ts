@@ -6,9 +6,9 @@ import type { PricingRate } from '../types/parking';
 const lotARate: PricingRate = {
 	id: 'lot-a',
 	name: 'Lot A - Racks',
-	freePeriodMinutes: 120, // 2 hours free
 	chargeSteps: [
-		{ durationMinutes: 360, rate: 100, isRecurring: false }, // next 6 hours (up to 8h total) = 100 yen
+		{ durationMinutes: 120, rate: 0 }, // 2 hours free
+		{ durationMinutes: 360, rate: 100 }, // next 6 hours (up to 8h total) = 100 yen
 		{ durationMinutes: 120, rate: 100, isRecurring: true }, // 100 yen per 2 hours after
 	],
 };
@@ -18,7 +18,6 @@ const lotARate: PricingRate = {
 const lotBRate: PricingRate = {
 	id: 'lot-b',
 	name: 'Lot B - Racks',
-	freePeriodMinutes: 0,
 	chargeSteps: [
 		{ durationMinutes: 240, rate: 100, isRecurring: true }, // 100 yen per 4 hours
 	],
@@ -29,9 +28,8 @@ const lotBRate: PricingRate = {
 const lotCRate: PricingRate = {
 	id: 'lot-c',
 	name: 'Lot C - First 10h then 5h',
-	freePeriodMinutes: 0,
 	chargeSteps: [
-		{ durationMinutes: 600, rate: 100, isRecurring: false }, // 100 yen for first 10 hours
+		{ durationMinutes: 600, rate: 100 }, // 100 yen for first 10 hours
 		{ durationMinutes: 300, rate: 100, isRecurring: true }, // 100 yen per 5 hours after
 	],
 };
@@ -46,13 +44,13 @@ interface TestCase {
 const testCases: TestCase[] = [
 	// Lot A cases
 	{
-		name: 'Lot A - 1 hour (within free period)',
+		name: 'Lot A - 1 hour (within zero-cost first step)',
 		rate: lotARate,
 		durationMinutes: 60,
 		expectedFee: 0,
 	},
 	{
-		name: 'Lot A - 2 hours (exact free period limit)',
+		name: 'Lot A - 2 hours (exact zero-cost first step limit)',
 		rate: lotARate,
 		durationMinutes: 120,
 		expectedFee: 0,

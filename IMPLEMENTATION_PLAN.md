@@ -6,16 +6,14 @@ We want to build a self-contained, high-fidelity Nuxt 3/4 web application using 
 
 ## Technical Feasibility & Design Decisions
 
-### 1. Migrating to Google Maps in the Future
+### 1. Map Rendering with MapLibre GL JS and OpenMapTiles
 
-Switching from Leaflet (OpenStreetMap) to Google Maps in the future will be **straightforward** because:
+The embedded maps now use **MapLibre GL JS** with an OpenMapTiles-compatible style URL. This keeps the app on an open vector-map rendering stack without requiring us to self-host tiles immediately.
 
-- **Map Isolation**: All mapping functionality (rendering pins, drawing routes, picking coordinates, handling map clicks) is encapsulated within a single client-only Vue component: `Map.client.vue`.
-- **Migration Path**: To switch, we would only need to:
-    1. Replace the Leaflet script/styles with the Google Maps JavaScript API script.
-    2. Rewrite the initialization and marker-handling code inside `Map.client.vue` using Google Maps classes (`google.maps.Map`, `google.maps.marker.AdvancedMarkerElement`).
-    3. Replace the Nominatim geocoding fetch call with a call to the Google Places API or Geocoding API.
-    4. The rest of the page layout, pricing calculator, and admin forms will remain completely unchanged.
+- **Map Isolation**: All mapping functionality (rendering pins, drawing popups, picking coordinates, handling map clicks) is encapsulated within `app/components/MapClient.vue`.
+- **Hosted Tile Strategy**: The default style URL is configured through `NUXT_PUBLIC_MAP_STYLE_URL`, with optional `NUXT_PUBLIC_MAPTILER_KEY` replacement for hosted MapTiler/OpenMapTiles styles.
+- **Future Self-Hosting Path**: Self-hosting remains a future work item. The likely path is TileServer GL or MapTiler Server serving `.mbtiles` over HTTP, with the Nuxt app pointing `NUXT_PUBLIC_MAP_STYLE_URL` at that server's style JSON endpoint.
+- **Migration Path**: To switch to Google Maps later, we would rewrite the isolated `MapClient.vue` implementation and replace the geocoding provider. The search page, pricing calculator, and admin forms can remain mostly unchanged.
 
 ### 2. Scalability of Single JSON File
 
@@ -91,7 +89,7 @@ We will split the interface into three pages:
     - Inputs: Destination address (with geocoding autocomplete dropdown) and optional stay duration (hours/minutes).
     - "Search" button redirects to `/search` with query params (e.g. `/search?q=Ikebukuro&lat=35.7289&lng=139.7104&duration=180`).
 2. **Search & Results Page (`pages/search.vue`)**:
-    - A split-screen layout (results & filters on the left, interactive Leaflet map on the right).
+    - A split-screen layout (results & filters on the left, interactive MapLibre map on the right).
     - Synchronized with URL query parameters so reloading keeps the exact search state.
     - An inline search bar at the top lets users modify location or duration, instantly updating results on the same page.
     - Shows distances, dynamic prices, and cheapest/closest recommendations.
@@ -115,7 +113,7 @@ We will split the interface into three pages:
 
 #### [MODIFY] [nuxt.config.ts](file:///c:/Users/Ethan/Workspace/bicycle-parking/nuxt.config.ts)
 
-- Configure styles and head options to include Leaflet CSS/JS CDNs dynamically.
+- Configure styles and head options to include MapLibre GL JS CSS/JS CDNs dynamically.
 
 #### [MODIFY] [global.scss](file:///c:/Users/Ethan/Workspace/bicycle-parking/app/styles/global.scss)
 
@@ -156,7 +154,7 @@ We will split the interface into three pages:
 
 #### [NEW] [Map.client.vue](file:///c:/Users/Ethan/Workspace/bicycle-parking/app/components/Map.client.vue)
 
-- Leaflet map component with custom pins for destination and nearby parking lots. Handles drag/click events.
+- MapLibre map component with custom pins for destination and nearby parking lots. Handles click events and supports hosted OpenMapTiles-compatible styles.
 
 #### [MODIFY] [index.vue](file:///c:/Users/Ethan/Workspace/bicycle-parking/app/pages/index.vue)
 

@@ -186,13 +186,13 @@ body {
 	border: 1px solid rgba(111, 66, 193, 0.2);
 }
 
-/* Leaflet Map Overrides to fit themes */
-.leaflet-container {
+/* MapLibre Map Overrides to fit themes */
+.maplibregl-map {
 	font-family: inherit;
 	background-color: #f8f9fa !important;
 }
 
-.leaflet-popup-content-wrapper {
+.maplibregl-popup-content {
 	border-radius: 0.75rem !important;
 	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
 	border: 1px solid rgba(var(--bs-emphasis-color-rgb), 0.08);
@@ -200,17 +200,17 @@ body {
 	color: var(--bs-body-color) !important;
 }
 
-.leaflet-popup-tip {
+.maplibregl-popup-tip {
 	background: var(--bs-body-bg) !important;
 }
 
-/* Theme support for Leaflet popups */
+/* Theme support for MapLibre popups */
 [data-bs-theme='dark'] {
-	.leaflet-popup-content-wrapper {
+	.maplibregl-popup-content {
 		background: #212529 !important;
 		color: #f8f9fa !important;
 	}
-	.leaflet-popup-tip {
+	.maplibregl-popup-tip {
 		background: #212529 !important;
 	}
 }
@@ -230,4 +230,57 @@ body {
 .custom-marker-pin:hover {
 	transform: scale(1.15);
 	z-index: 1000 !important;
+}
+
+.admin-surface-card {
+	border: 1px solid rgba(var(--bs-emphasis-color-rgb), 0.14);
+	background: var(--bs-body-bg);
+}
+
+.admin-lot-card {
+	transition:
+		box-shadow 0.2s ease,
+		border-color 0.2s ease,
+		background-color 0.2s ease;
+}
+
+.admin-lot-card.selected {
+	border-color: var(--bs-primary) !important;
+	background: rgba(var(--bs-primary-rgb), 0.08) !important;
+}
+
+.admin-lot-card:hover,
+.hover-shadow:hover {
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+	border-color: rgba(var(--bs-primary-rgb), 0.25) !important;
+}
+
+.admin-kicker {
+	font-size: 0.65rem;
+	letter-spacing: 0.5px;
+	text-transform: uppercase;
+}
+
+.hover-bg-body {
+	transition: background-color 0.15s ease;
+}
+
+.hover-bg-body:hover {
+	background-color: var(--bs-tertiary-bg);
+	cursor: pointer;
+}
+
+.btn-xs {
+	padding: 0.15rem 0.5rem;
+	font-size: 0.72rem;
+	line-height: 1.2;
+	border-radius: 4px;
+}
+
+.shadow-xs {
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.cursor-pointer {
+	cursor: pointer;
 }

@@ -1,82 +1,9 @@
 <template>
 	<div class="d-flex flex-column min-vh-100 hero-section">
-		<!-- Navbar -->
-		<nav
-			class="navbar navbar-expand-lg navbar-dark bg-dark px-3 py-2 border-bottom border-secondary border-opacity-20 shadow-sm"
-		>
-			<div class="container">
-				<NuxtLink
-					to="/"
-					class="navbar-brand d-flex align-items-center"
-				>
-					<span class="material-symbols-outlined logo-icon me-2"
-						>directions_bike</span
-					>
-					<span>CyclePark</span>
-				</NuxtLink>
-				<button
-					class="navbar-toggler"
-					type="button"
-					data-bs-toggle="collapse"
-					data-bs-target="#navbarNav"
-				>
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div
-					id="navbarNav"
-					class="collapse navbar-collapse"
-				>
-					<ul class="navbar-nav ms-auto align-items-center">
-						<li class="nav-item">
-							<NuxtLink
-								to="/"
-								class="nav-link active"
-								>Home</NuxtLink
-							>
-						</li>
-						<li class="nav-item">
-							<NuxtLink
-								to="/search"
-								class="nav-link"
-								>Find Parking</NuxtLink
-							>
-						</li>
-						<li class="nav-item">
-							<NuxtLink
-								to="/admin"
-								class="nav-link btn btn-outline-primary btn-sm text-white ms-lg-2 px-3 py-1"
-							>
-								<span
-									class="material-symbols-outlined align-middle me-1"
-									style="font-size: 1.1rem"
-									>admin_panel_settings</span
-								>
-								Admin Portal
-							</NuxtLink>
-						</li>
-						<li class="nav-item ms-lg-3 mt-2 mt-lg-0">
-							<!-- Theme Toggle -->
-							<button
-								class="btn btn-sm btn-link text-secondary p-1 border-0"
-								title="Toggle Theme"
-								@click="toggleColorMode"
-							>
-								<span
-									v-if="colorMode.preference === 'dark'"
-									class="material-symbols-outlined text-warning"
-									>light_mode</span
-								>
-								<span
-									v-else
-									class="material-symbols-outlined text-light"
-									>dark_mode</span
-								>
-							</button>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</nav>
+		<AppNavbar
+			container-class="container"
+			:shadow="true"
+		/>
 
 		<!-- Hero Content -->
 		<div class="container flex-grow-1 d-flex align-items-center py-5">
@@ -136,7 +63,7 @@
 							</div>
 							<div>
 								<strong class="d-block small"
-									>Interactive Leaflet Map</strong
+									>Interactive MapLibre Map</strong
 								>
 								<span class="text-muted small"
 									>Drop custom destination pins anywhere to
@@ -175,164 +102,41 @@
 								Start Your Search
 							</h4>
 
-							<!-- Address/Location Search -->
-							<div class="position-relative mb-3">
-								<label
-									class="form-label small fw-semibold text-secondary"
-									>1. Where are you heading?</label
-								>
-								<div class="input-group">
-									<span
-										class="input-group-text bg-light text-secondary border-end-0"
-									>
-										<span
-											class="material-symbols-outlined"
-											style="font-size: 1.2rem"
-											>location_on</span
-										>
-									</span>
-									<input
-										v-model="addressInput"
-										type="text"
-										class="form-control border-start-0"
-										placeholder="Enter station, address, or city..."
-										@input="onAddressInput"
-										@focus="showGeocodeDropdown = true"
-										@keydown.escape="
-											showGeocodeDropdown = false
-										"
-									/>
-									<button
-										v-if="addressInput"
-										class="btn btn-outline-secondary border-start-0"
-										@click="clearAddressSearch"
-									>
-										<span
-											class="material-symbols-outlined"
-											style="font-size: 1.1rem"
-											>close</span
-										>
-									</button>
-								</div>
+							<LocationSearchInput
+								v-model="addressInput"
+								class="mb-3"
+								label="1. Where are you heading?"
+								placeholder="Enter station, address, or city..."
+								:results="geocodeResults"
+								:loading="geocodeLoading"
+								:show-dropdown="showGeocodeDropdown"
+								:max-dropdown-height="200"
+								@input="onAddressInput"
+								@focus="showGeocodeDropdown = true"
+								@escape="showGeocodeDropdown = false"
+								@clear="clearAddressSearch"
+								@select="selectAddress"
+							/>
 
-								<!-- Geocoding Autocomplete Dropdown -->
-								<div
-									v-if="
-										showGeocodeDropdown
-										&& geocodeResults.length > 0
-									"
-									class="position-absolute w-100 bg-body shadow rounded-3 border mt-1 overflow-hidden"
-									style="
-										z-index: 1050;
-										max-height: 200px;
-										overflow-y: auto;
-									"
-								>
-									<div
-										v-for="res in geocodeResults"
-										:key="res.place_id"
-										class="p-2 border-bottom hover-bg-light cursor-pointer text-start"
-										@click="selectAddress(res)"
-									>
-										<div
-											class="fw-bold small text-truncate"
-										>
-											{{ res.display_name.split(',')[0] }}
-										</div>
-										<div
-											class="text-secondary"
-											style="
-												font-size: 0.72rem;
-												overflow: hidden;
-												text-overflow: ellipsis;
-												white-space: nowrap;
-											"
-										>
-											{{ res.display_name }}
-										</div>
-									</div>
-								</div>
-
-								<!-- Geocoding spinner -->
-								<div
-									v-if="geocodeLoading"
-									class="position-absolute end-0 top-50 translate-middle-y me-5 mt-2 spinner-border spinner-border-sm text-primary"
-									role="status"
-								></div>
-							</div>
-
-							<!-- Duration text box / slider combo -->
-							<div class="mb-4">
-								<div
-									class="d-flex justify-content-between align-items-center mb-1"
-								>
-									<label
-										class="form-label small fw-semibold text-secondary mb-0"
-										>2. Stay duration (optional)</label
-									>
-									<div class="d-flex align-items-center">
-										<input
-											v-model="durationHours"
-											type="number"
-											class="form-control form-control-sm text-center fw-bold me-1"
-											style="width: 50px"
-											min="0"
-											max="48"
-											@change="onHoursChange"
-										/>
-										<span class="small text-secondary me-2"
-											>h</span
-										>
-										<input
-											v-model="durationMinutes"
-											type="number"
-											class="form-control form-control-sm text-center fw-bold me-1"
-											style="width: 50px"
-											min="0"
-											max="59"
-											@change="onMinutesChange"
-										/>
-										<span class="small text-secondary"
-											>m</span
-										>
-									</div>
-								</div>
-
-								<!-- Slider -->
-								<input
-									v-model="sliderValue"
-									type="range"
-									class="price-slider"
-									min="0"
-									max="1440"
-									step="15"
-									@input="onSliderInput"
-								/>
-
-								<!-- Quick Presets -->
-								<div
-									class="d-flex flex-wrap gap-1 mt-2 justify-content-between"
-								>
-									<button
-										v-for="preset in durationPresets"
-										:key="preset.value"
-										class="btn btn-xs py-0.5 px-2 border rounded-pill text-nowrap"
-										:class="
-											sliderValue === preset.value ?
-												'btn-primary text-white border-primary'
-											:	'btn-light text-dark'
-										"
-										style="font-size: 0.72rem"
-										@click="applyPreset(preset.value)"
-									>
-										{{ preset.label }}
-									</button>
-								</div>
-							</div>
+							<DurationSelector
+								v-model:slider-value="sliderValue"
+								v-model:hours="durationHours"
+								v-model:minutes="durationMinutes"
+								class="mb-4"
+								label="2. Stay duration (optional)"
+								:presets="durationPresets"
+								font-size="0.72rem"
+								@slider-input="onSliderInput"
+								@hours-change="onHoursChange"
+								@minutes-change="onMinutesChange"
+								@preset="applyPreset"
+							/>
 
 							<!-- Submit CTA -->
 							<button
+								type="button"
 								class="btn btn-primary btn-lg w-100 py-3 rounded-3 d-flex align-items-center justify-content-center shadow"
+								:disabled="!canSearch"
 								@click="triggerSearch"
 							>
 								<span class="material-symbols-outlined me-2"
@@ -358,7 +162,7 @@
 					class="mb-0 text-muted"
 					style="font-size: 0.75rem"
 				>
-					Powered by Nuxt, Bootstrap & OpenStreetMap
+					Powered by Nuxt, Bootstrap & OpenMapTiles
 				</p>
 			</div>
 		</footer>
@@ -366,10 +170,7 @@
 </template>
 
 <script lang="ts" setup>
-	import { useRouter } from 'vue-router';
-
 	const router = useRouter();
-	const colorMode = useColorMode();
 
 	// Input states
 	const addressInput = ref('');
@@ -396,10 +197,7 @@
 		{ label: '24 Hours', value: 1440 },
 	];
 
-	const toggleColorMode = () => {
-		colorMode.preference =
-			colorMode.preference === 'dark' ? 'light' : 'dark';
-	};
+	const canSearch = computed(() => addressInput.value.trim().length > 0);
 
 	// Geocoding Autocomplete via Nominatim
 	const onAddressInput = () => {
@@ -485,20 +283,17 @@
 
 	// Redirect to Search Page with URL query params
 	const triggerSearch = () => {
+		if (!canSearch.value) {
+			return;
+		}
+
 		const queryParams: Record<string, string> = {
 			lat: searchLat.value.toString(),
 			lng: searchLng.value.toString(),
 			duration: sliderValue.value.toString(),
 		};
 
-		if (addressInput.value) {
-			queryParams.q = addressInput.value;
-		} else {
-			// If empty address, default to Ikebukuro Station
-			queryParams.q = 'Ikebukuro Station, Tokyo, Japan';
-			queryParams.lat = '35.7289';
-			queryParams.lng = '139.7104';
-		}
+		queryParams.q = addressInput.value.trim();
 
 		router.push({
 			path: '/search',
@@ -518,17 +313,9 @@
 		-webkit-text-fill-color: transparent;
 	}
 
-	.hover-bg-light:hover {
-		background-color: var(--bs-light);
-	}
-
 	.btn-xs {
 		padding: 0.15rem 0.5rem;
 		font-size: 0.72rem;
 		line-height: 1.2;
-	}
-
-	.hover-bg-light {
-		transition: background-color 0.15s ease;
 	}
 </style>

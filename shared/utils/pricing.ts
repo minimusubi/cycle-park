@@ -12,12 +12,7 @@ export function calculateParkingFee(
 		return 0;
 	}
 
-	// If stay is within the free period, it's free.
-	if (durationMinutes <= rate.freePeriodMinutes) {
-		return 0;
-	}
-
-	let remainingMinutes = durationMinutes - rate.freePeriodMinutes;
+	let remainingMinutes = durationMinutes;
 	let totalFee = 0;
 
 	for (const step of rate.chargeSteps) {

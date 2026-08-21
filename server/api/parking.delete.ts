@@ -1,7 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { getQuery } from 'h3';
-import type { ParkingLocation } from '#shared/types/parking';
+import { join } from 'node:path';
 
 const DB_PATH = join(process.cwd(), 'shared', 'data', 'parking.json');
 

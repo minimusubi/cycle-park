@@ -26,23 +26,26 @@ export default defineNuxtConfig({
 			link: [
 				{
 					rel: 'stylesheet',
-					href: 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
-					integrity:
-						'sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=',
-					crossorigin: '',
+					href: 'https://unpkg.com/maplibre-gl/dist/maplibre-gl.css',
 				},
 			],
 			script: [
 				{
-					src: 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
-					integrity:
-						'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=',
-					crossorigin: '',
+					src: 'https://unpkg.com/maplibre-gl/dist/maplibre-gl.js',
 				},
 			],
 		},
 	},
 	css: ['~/styles/global.scss'],
+	runtimeConfig: {
+		public: {
+			mapStyleUrl:
+				process.env.NUXT_PUBLIC_MAP_STYLE_URL
+				|| 'https://openmaptiles.github.io/osm-bright-gl-style/style-cdn.json',
+			mapDarkStyleUrl: process.env.NUXT_PUBLIC_MAP_DARK_STYLE_URL || '',
+			mapTilerKey: process.env.NUXT_PUBLIC_MAPTILER_KEY || '',
+		},
+	},
 	nitro: {
 		esbuild: {
 			options: {

@@ -1,10 +1,25 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { readBody } from 'h3';
-import type { ParkingLocation } from '#shared/types/parking';
 
 const DB_DIR = join(process.cwd(), 'shared', 'data');
 const DB_PATH = join(DB_DIR, 'parking.json');
+
+const sanitizeRates = (rates: PricingRate[]): PricingRate[] =>
+	rates.map((rate) => ({
+		...rate,
+		chargeSteps: rate.chargeSteps.map((step, stepIndex) => ({
+			durationMinutes: step.durationMinutes,
+			rate: step.rate,
+			...((
+				stepIndex === rate.chargeSteps.length - 1
+				&& Number(step.rate) !== 0
+				&& step.isRecurring === true
+			) ?
+				{ isRecurring: true }
+			:	{}),
+		})),
+	}));
 
 export default defineEventHandler(async (event) => {
 	const body = await readBody(event);
@@ -18,8 +33,10 @@ export default defineEventHandler(async (event) => {
 	// Basic validation
 	if (
 		!body.name
-		|| !body.latitude
-		|| !body.longitude
+		|| body.latitude === undefined
+		|| body.latitude === null
+		|| body.longitude === undefined
+		|| body.longitude === null
 		|| !body.address
 		|| !body.country
 	) {
@@ -60,8 +77,9 @@ export default defineEventHandler(async (event) => {
 			Array.isArray(body.paymentMethods) ?
 				body.paymentMethods.map(String)
 			:	[],
-		rates: Array.isArray(body.rates) ? body.rates : [],
+		rates: Array.isArray(body.rates) ? sanitizeRates(body.rates) : [],
 		photoUrl: body.photoUrl ? String(body.photoUrl) : undefined,
+		notes: body.notes ? String(body.notes) : undefined,
 		lastUpdated: now,
 	};
 

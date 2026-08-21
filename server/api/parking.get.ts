@@ -1,8 +1,6 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { getQuery } from 'h3';
-import type { ParkingLocation } from '#shared/types/parking';
-import { getHaversineDistance } from '#shared/utils/pricing';
+import { join } from 'node:path';
 
 const DB_DIR = join(process.cwd(), 'shared', 'data');
 const DB_PATH = join(DB_DIR, 'parking.json');
@@ -22,18 +20,18 @@ const SEED_DATA: ParkingLocation[] = [
 			{
 				id: 'top-rack',
 				name: 'Top Rack',
-				freePeriodMinutes: 120, // 2 hours free
 				chargeSteps: [
-					{ durationMinutes: 360, rate: 100, isRecurring: false }, // 100 yen for the next 6 hours
+					{ durationMinutes: 120, rate: 0 }, // 2 hours free
+					{ durationMinutes: 360, rate: 100 }, // 100 yen for the next 6 hours
 					{ durationMinutes: 120, rate: 100, isRecurring: true }, // 100 yen for every 2 hours after
 				],
 			},
 			{
 				id: 'bottom-rack',
 				name: 'Bottom Rack',
-				freePeriodMinutes: 120, // 2 hours free
 				chargeSteps: [
-					{ durationMinutes: 180, rate: 100, isRecurring: false }, // 100 yen for the next 3 hours
+					{ durationMinutes: 120, rate: 0 }, // 2 hours free
+					{ durationMinutes: 180, rate: 100 }, // 100 yen for the next 3 hours
 					{ durationMinutes: 60, rate: 100, isRecurring: true }, // 100 yen for every 1 hour after
 				],
 			},
@@ -55,7 +53,6 @@ const SEED_DATA: ParkingLocation[] = [
 			{
 				id: 'standard-rack',
 				name: 'Standard Rack',
-				freePeriodMinutes: 0,
 				chargeSteps: [
 					{ durationMinutes: 240, rate: 100, isRecurring: true }, // 100 yen per 4 hours
 				],
@@ -78,17 +75,16 @@ const SEED_DATA: ParkingLocation[] = [
 			{
 				id: 'secure-locker',
 				name: 'Secure Locker',
-				freePeriodMinutes: 60, // 1 hour free
 				chargeSteps: [
+					{ durationMinutes: 60, rate: 0 }, // 1 hour free
 					{ durationMinutes: 120, rate: 1.5, isRecurring: true }, // $1.50 per 2 hours
 				],
 			},
 			{
 				id: 'standard-hoop',
 				name: 'Standard Hoop (Outdoor)',
-				freePeriodMinutes: 1440, // 24 hours free
 				chargeSteps: [
-					{ durationMinutes: 1440, rate: 0, isRecurring: true },
+					{ durationMinutes: 1440, rate: 0 }, // 24 hours free
 				],
 			},
 		],

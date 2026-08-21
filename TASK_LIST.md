@@ -11,3 +11,5 @@
 - [x] Implement Administrative CRUD Portal (`app/pages/admin.vue`)
 - [x] Verify Calculations & Run Compilation Checks
 - [x] Generate Walkthrough Artifact (`walkthrough.md`)
+- [x] Switch embedded maps from Leaflet/OSM raster tiles to MapLibre GL JS with hosted OpenMapTiles-compatible style configuration
+- [ ] Future: Evaluate self-hosted OpenMapTiles/TileServer GL deployment outside or alongside Nuxt server runtime

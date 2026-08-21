@@ -6,11 +6,10 @@
 			style="min-height: 350px"
 		></div>
 
-		<!-- Instruction overlay for interactive mode -->
 		<div
 			v-if="interactiveMode"
 			class="position-absolute bottom-0 start-50 translate-middle-x mb-3 bg-dark text-white px-3 py-2 rounded-pill shadow-lg border border-secondary text-nowrap pointer-events-none"
-			style="z-index: 1000; font-size: 0.85rem; opacity: 0.9"
+			style="z-index: 10; font-size: 0.85rem; opacity: 0.9"
 		>
 			<span
 				class="material-symbols-outlined me-1"
@@ -55,75 +54,171 @@
 		(e: 'pin-clicked', pinId: string): void;
 	}>();
 
+	const runtimeConfig = useRuntimeConfig();
+	const colorMode = useColorMode();
 	const mapContainer = ref<HTMLElement | null>(null);
 	let map: any = null;
-	let markerLayer: any = null;
 	let destinationMarker: any = null;
 	let interactiveMarker: any = null;
+	let parkingMarkers: any[] = [];
 
-	// Initialize Leaflet Map
+	const toLngLat = (coords: [number, number]): [number, number] => [
+		coords[1],
+		coords[0],
+	];
+
+	const getMapStyleUrl = (darkMode: boolean): string => {
+		const lightStyle = String(runtimeConfig.public.mapStyleUrl || '');
+		const configuredDarkStyle = String(
+			runtimeConfig.public.mapDarkStyleUrl || '',
+		);
+		const configuredStyle =
+			darkMode && configuredDarkStyle ?
+				configuredDarkStyle
+			: darkMode ?
+				lightStyle.replace('/maps/streets-v4/', '/maps/streets-v4-dark/')
+			: lightStyle;
+		const mapTilerKey = String(runtimeConfig.public.mapTilerKey || '');
+
+		if (configuredStyle.includes('{key}')) {
+			return configuredStyle.replace('{key}', mapTilerKey);
+		}
+
+		return configuredStyle;
+	};
+
+	const createMarkerElement = (
+		markerClass: string,
+		icon: string,
+		size: number,
+		priceLabel = '',
+	): HTMLElement => {
+		const wrapper = document.createElement('div');
+		wrapper.className = 'maplibre-marker-wrapper';
+
+		const marker = document.createElement('div');
+		marker.className = `custom-marker-pin ${markerClass} text-white shadow-md border border-2 border-white`;
+		marker.style.width = `${size}px`;
+		marker.style.height = `${size}px`;
+		marker.style.borderRadius = '50%';
+
+		const iconSpan = document.createElement('span');
+		iconSpan.className = 'material-symbols-outlined';
+		iconSpan.style.fontSize = size >= 40 ? '24px' : '20px';
+		iconSpan.textContent = icon;
+		marker.appendChild(iconSpan);
+		wrapper.appendChild(marker);
+
+		if (priceLabel) {
+			const badge = document.createElement('div');
+			badge.className =
+				'bg-dark text-white rounded-pill px-2 mt-1 border border-secondary shadow-sm text-nowrap text-center';
+			badge.style.fontSize = '0.7rem';
+			badge.style.fontWeight = 'bold';
+			badge.style.width = 'fit-content';
+			badge.style.margin = '0 auto';
+			badge.textContent = priceLabel;
+			wrapper.appendChild(badge);
+		}
+
+		return wrapper;
+	};
+
+	const removeMarker = (marker: any) => {
+		if (marker) {
+			marker.remove();
+		}
+	};
+
+	const clearParkingMarkers = () => {
+		parkingMarkers.forEach((marker) => marker.remove());
+		parkingMarkers = [];
+	};
+
 	onMounted(() => {
 		if (!mapContainer.value) {
 			return;
 		}
 
-		const L = (window as any).L;
-		if (!L) {
-			console.error('Leaflet is not loaded on the window object.');
+		const maplibregl = (window as any).maplibregl;
+		if (!maplibregl) {
+			console.error('MapLibre GL JS is not loaded on the window object.');
 			return;
 		}
 
-		// Initialize Map
-		map = L.map(mapContainer.value, {
-			zoomControl: true,
-		}).setView(props.center, props.zoom);
-
-		// Add OSM Tiles
-		L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-			attribution:
-				'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-		}).addTo(map);
-
-		// Initialize Layer for Parking Pins
-		markerLayer = L.layerGroup().addTo(map);
-
-		// Set click listener for interactive mode / placing custom pins
-		map.on('click', (e: any) => {
-			const coords = e.latlng;
-
-			if (props.interactiveMode) {
-				// Place marker at clicked coordinate
-				placeInteractiveMarker(coords.lat, coords.lng);
-				emit('map-clicked', { lat: coords.lat, lng: coords.lng });
-			} else {
-				// For main search page, clicking the map moves the destination
-				emit('map-clicked', { lat: coords.lat, lng: coords.lng });
-			}
+		map = new maplibregl.Map({
+			container: mapContainer.value,
+			style: getMapStyleUrl(colorMode.value === 'dark'),
+			center: toLngLat(props.center),
+			zoom: props.zoom,
+			attributionControl: true,
 		});
 
-		// Render initial inputs
-		renderDestination();
-		renderPins();
+		map.addControl(new maplibregl.NavigationControl(), 'top-right');
+
+		map.on('click', (event: any) => {
+			const clickTarget = event.originalEvent?.target;
+			if (
+				clickTarget instanceof Element &&
+				clickTarget.closest('.maplibregl-marker, .maplibregl-popup')
+			) {
+				return;
+			}
+
+			const coords = event.lngLat;
+
+			if (props.interactiveMode && !props.destination) {
+				placeInteractiveMarker(coords.lat, coords.lng);
+			}
+
+			emit('map-clicked', { lat: coords.lat, lng: coords.lng });
+		});
+
+		map.on('load', () => {
+			renderDestination();
+			renderPins();
+		});
 	});
 
 	onBeforeUnmount(() => {
+		clearParkingMarkers();
+		removeMarker(destinationMarker);
+		removeMarker(interactiveMarker);
+
 		if (map) {
 			map.remove();
+			map = null;
 		}
 	});
 
-	// Watch center property changes
 	watch(
 		() => props.center,
 		(newCenter) => {
 			if (map && newCenter) {
-				map.setView(newCenter, map.getZoom());
+				map.setCenter(toLngLat(newCenter));
 			}
 		},
 		{ deep: true },
 	);
 
-	// Watch pins property changes
+	watch(
+		() => props.zoom,
+		(newZoom) => {
+			if (map && typeof newZoom === 'number') {
+				map.setZoom(newZoom);
+			}
+		},
+	);
+
+	watch(
+		() => colorMode.value,
+		(mode) => {
+			if (map) {
+				map.setStyle(getMapStyleUrl(mode === 'dark'));
+			}
+		},
+	);
+
 	watch(
 		() => props.pins,
 		() => {
@@ -132,7 +227,6 @@
 		{ deep: true },
 	);
 
-	// Watch destination property changes
 	watch(
 		() => props.destination,
 		() => {
@@ -142,113 +236,79 @@
 	);
 
 	const placeInteractiveMarker = (lat: number, lng: number) => {
-		const L = (window as any).L;
-		if (!L || !map) {
+		const maplibregl = (window as any).maplibregl;
+		if (!maplibregl || !map) {
 			return;
 		}
 
 		if (interactiveMarker) {
-			interactiveMarker.setLatLng([lat, lng]);
-		} else {
-			// Custom Red Pin Icon
-			const customIcon = L.divIcon({
-				html: `
-        <div class="custom-marker-pin bg-danger text-white" style="width: 36px; height: 36px;">
-          <span class="material-symbols-outlined" style="font-size: 20px;">location_on</span>
-        </div>
-      `,
-				className: 'custom-leaflet-icon',
-				iconSize: [36, 36],
-				iconAnchor: [18, 36],
-			});
-
-			interactiveMarker = L.marker([lat, lng], {
-				icon: customIcon,
-			}).addTo(map);
+			interactiveMarker.setLngLat([lng, lat]);
+			return;
 		}
+
+		interactiveMarker = new maplibregl.Marker({
+			element: createMarkerElement('bg-danger', 'location_on', 36),
+			anchor: 'bottom',
+		})
+			.setLngLat([lng, lat])
+			.addTo(map);
 	};
 
 	const renderDestination = () => {
-		const L = (window as any).L;
-		if (!L || !map) {
+		const maplibregl = (window as any).maplibregl;
+		if (!maplibregl || !map) {
 			return;
 		}
 
-		// Clear previous destination marker
-		if (destinationMarker) {
-			map.removeLayer(destinationMarker);
-			destinationMarker = null;
+		removeMarker(destinationMarker);
+		destinationMarker = null;
+
+		if (!props.destination) {
+			return;
 		}
 
-		// Draw new destination marker if provided
-		if (props.destination) {
-			const [lat, lng] = props.destination;
+		const [lat, lng] = props.destination;
+		const element = createMarkerElement(
+			'bg-danger shadow-lg border border-3 border-white animate-bounce',
+			'my_location',
+			40,
+		);
 
-			const customIcon = L.divIcon({
-				html: `
-        <div class="custom-marker-pin bg-danger text-white shadow-lg border border-3 border-white animate-bounce" style="width: 40px; height: 40px; border-radius: 50%;">
-          <span class="material-symbols-outlined" style="font-size: 24px; font-variation-settings: 'FILL' 1;">my_location</span>
-        </div>
-      `,
-				className: 'custom-leaflet-icon',
-				iconSize: [40, 40],
-				iconAnchor: [20, 20], // Center it
-			});
-
-			destinationMarker = L.marker([lat, lng], {
-				icon: customIcon,
-			}).addTo(map);
-			destinationMarker
-				.bindPopup(
+		destinationMarker = new maplibregl.Marker({
+			element,
+			anchor: 'center',
+		})
+			.setLngLat([lng, lat])
+			.setPopup(
+				new maplibregl.Popup({ offset: 20 }).setHTML(
 					'<strong class="text-danger">Search Destination</strong>',
-				)
-				.openPopup();
-		}
+				),
+			)
+			.addTo(map);
 	};
 
 	const renderPins = () => {
-		const L = (window as any).L;
-		if (!L || !map || !markerLayer) {
+		const maplibregl = (window as any).maplibregl;
+		if (!maplibregl || !map) {
 			return;
 		}
 
-		// Clear existing parking pins
-		markerLayer.clearLayers();
+		clearParkingMarkers();
 
 		props.pins.forEach((pin) => {
-			// Determine pin color and badge based on type/pricing
-			let pinClass = 'bg-primary'; // Default blue
-			let icon = 'directions_bike';
+			const markerClass = pin.isCheapest ? 'bg-success' : 'bg-primary';
+			const icon = pin.isCheapest ? 'payments' : 'directions_bike';
+			const element = createMarkerElement(
+				markerClass,
+				icon,
+				36,
+				pin.priceLabel || '',
+			);
 
-			if (pin.isCheapest) {
-				pinClass = 'bg-success'; // Green for cheapest
-				icon = 'payments';
-			}
-
-			const priceLabel =
-				pin.priceLabel ?
-					`<div class="bg-dark text-white rounded-pill px-2 py-0.5 mt-1 border border-secondary shadow-sm text-nowrap text-center" style="font-size: 0.7rem; font-weight: bold; width: fit-content; margin: 0 auto;">${pin.priceLabel}</div>`
-				:	'';
-
-			const customIcon = L.divIcon({
-				html: `
-        <div class="d-flex flex-column align-items-center">
-          <div class="custom-marker-pin ${pinClass} text-white shadow-md border border-2 border-white" style="width: 36px; height: 36px; border-radius: 50%;">
-            <span class="material-symbols-outlined" style="font-size: 20px;">${icon}</span>
-          </div>
-          ${priceLabel}
-        </div>
-      `,
-				className: 'custom-leaflet-icon',
-				iconSize: [60, 60],
-				iconAnchor: [30, 18], // Adjusted to put the pin center at lat/lng
+			element.addEventListener('click', () => {
+				emit('pin-clicked', pin.id);
 			});
 
-			const marker = L.marker([pin.latitude, pin.longitude], {
-				icon: customIcon,
-			});
-
-			// Popup Content
 			const popupContent = `
       <div style="font-family: 'Inter', sans-serif; min-width: 180px;">
         <h6 class="mb-1 text-primary fw-bold">${pin.name}</h6>
@@ -256,47 +316,49 @@
           <span class="material-symbols-outlined me-1" style="font-size: 0.9rem;">location_on</span>${pin.address}
         </p>
         ${pin.priceLabel ? `<div class="mt-2 text-success fw-bold" style="font-size: 0.95rem;">Cost: ${pin.priceLabel}</div>` : ''}
-        <button onclick="window.dispatchEvent(new CustomEvent('map-pin-select', { detail: '${pin.id}' }))" class="btn btn-sm btn-primary w-100 mt-2 py-1" style="font-size: 0.75rem;">View Details</button>
+        <button data-pin-id="${pin.id}" class="btn btn-sm btn-primary w-100 mt-2 py-1 map-popup-detail-button" style="font-size: 0.75rem;">View Details</button>
       </div>
     `;
 
-			marker.bindPopup(popupContent);
+			const popup = new maplibregl.Popup({ offset: 28 }).setHTML(
+				popupContent,
+			);
 
-			// Event hooks
-			marker.on('click', () => {
-				emit('pin-clicked', pin.id);
+			popup.on('open', () => {
+				const button = document.querySelector(
+					`.map-popup-detail-button[data-pin-id="${pin.id}"]`,
+				);
+				button?.addEventListener('click', () => {
+					emit('pin-clicked', pin.id);
+				});
 			});
 
-			markerLayer.addLayer(marker);
+			const marker = new maplibregl.Marker({
+				element,
+				anchor: 'top',
+			})
+				.setLngLat([pin.longitude, pin.latitude])
+				.setPopup(popup)
+				.addTo(map);
+
+			parkingMarkers.push(marker);
 		});
-
-		// Listen to the window event dispatched by popup button
-		if (typeof window !== 'undefined') {
-			(window as any)._onMapPinSelect = (e: any) => {
-				emit('pin-clicked', e.detail);
-			};
-			window.addEventListener(
-				'map-pin-select',
-				(window as any)._onMapPinSelect,
-			);
-		}
 	};
-
-	onBeforeUnmount(() => {
-		if (typeof window !== 'undefined' && (window as any)._onMapPinSelect) {
-			window.removeEventListener(
-				'map-pin-select',
-				(window as any)._onMapPinSelect,
-			);
-		}
-	});
 </script>
 
 <style>
-	.custom-leaflet-icon {
-		background: transparent !important;
-		border: none !important;
-		box-shadow: none !important;
+	.maplibre-marker-wrapper {
+		align-items: center;
+		background: transparent;
+		border: none;
+		display: flex;
+		flex-direction: column;
+		gap: 0;
+	}
+
+	.maplibregl-popup-content {
+		border-radius: 8px;
+		box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
 	}
 
 	@keyframes bounce {

@@ -1,13 +1,12 @@
 export interface ChargeStep {
 	durationMinutes: number; // Duration of the charge block
 	rate: number; // Fee for this duration block
-	isRecurring: boolean; // Whether this charge repeats every durationMinutes thereafter
+	isRecurring?: boolean; // Present only when this charge repeats every durationMinutes thereafter
 }
 
 export interface PricingRate {
 	id: string; // Unique identifier (e.g., "top-rack", "bottom-rack")
 	name: string; // Display name of the rack/section (e.g., "Top Rack", "Bottom Rack")
-	freePeriodMinutes: number; // Initial free parking duration (0 if none)
 	chargeSteps: ChargeStep[]; // Array of sequential charging rules
 }
 
@@ -22,6 +21,7 @@ export interface ParkingLocation {
 	paymentMethods: string[]; // Shorthand keys: e.g., ["cash", "ic", "paypay"]
 	rates: PricingRate[]; // Pricing sections (e.g. bottom rack vs top rack)
 	photoUrl?: string; // Base64 encoded image string or placeholder URL
+	notes?: string; // Internal/public notes such as validation rules or special conditions
 	lastUpdated: string; // ISO string
 }
 
