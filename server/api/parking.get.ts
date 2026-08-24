@@ -97,9 +97,11 @@ const SEED_DATA: ParkingLocation[] = [
 export default defineEventHandler((event) => {
 	// Ensure DB directory and file exist
 	if (!existsSync(DB_DIR)) {
+		console.log(`${DB_DIR} does not exist! Creating data directory...`);
 		mkdirSync(DB_DIR, { recursive: true });
 	}
 	if (!existsSync(DB_PATH)) {
+		console.log(`${DB_PATH} does not exist! Creating data file...`);
 		writeFileSync(DB_PATH, JSON.stringify(SEED_DATA, null, 2), 'utf-8');
 	}
 
