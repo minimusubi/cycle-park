@@ -1,29 +1,32 @@
 <template>
-	<div class="card shadow border-0 rounded-3">
+	<div class="card shadow border-0 rounded-5">
 		<div
-			class="card-header bg-dark text-white p-3 d-flex justify-content-between align-items-center rounded-top-3"
+			class="card-header bg-black fg-white p-5 d-flex flex-row justify-content-between align-items-center rounded-top-5"
+			data-bs-theme="dark"
 		>
 			<h5 class="mb-0 fw-bold d-flex align-items-center">
-				<span class="material-symbols-outlined me-2">
-					edit_note
-				</span>
-				{{ isEditing ? 'Edit Parking Location' : 'Add New Parking Location' }}
+				<span class="material-symbols-outlined me-3"> edit_note </span>
+				{{
+					isEditing ?
+						'Edit Parking Location'
+					:	'Add New Parking Location'
+				}}
 			</h5>
 			<NuxtLink
 				to="/admin"
-				class="btn btn-sm btn-outline-light"
+				class="btn btn-sm btn-outline theme-secondary fg-white border-white"
 			>
 				Back to list
 			</NuxtLink>
 		</div>
 
-		<div class="card-body p-4">
+		<div class="card-body p-7">
 			<form @submit.prevent="saveLocation">
-				<h6 class="text-primary fw-bold mb-3 border-bottom pb-2">
+				<h6 class="fg-primary fw-bold mb-5 border-bottom pb-3">
 					1. General Information
 				</h6>
-				<div class="row g-3 mb-4">
-					<div class="col-md-6">
+				<div class="row g-5 mb-7">
+					<div class="md:col-6">
 						<label class="form-label small fw-bold">
 							Parking Name
 						</label>
@@ -35,11 +38,11 @@
 							placeholder="e.g. Ikebukuro Station East Exit Rack"
 						/>
 					</div>
-					<div class="col-md-6">
+					<div class="md:col-6">
 						<label class="form-label small fw-bold">Country</label>
 						<select
 							v-model="form.country"
-							class="form-select"
+							class="form-control"
 							@change="onCountryChange"
 						>
 							<option
@@ -61,7 +64,7 @@
 							placeholder="e.g. 1-2-3 Higashiikebukuro, Toshima City, Tokyo"
 						/>
 					</div>
-					<div class="col-md-6">
+					<div class="md:col-6">
 						<label class="form-label small fw-bold">
 							Hours of Operation
 						</label>
@@ -72,7 +75,7 @@
 							placeholder="e.g. 24 Hours, or 08:00 - 23:00"
 						/>
 					</div>
-					<div class="col-md-6">
+					<div class="md:col-6">
 						<label class="form-label small fw-bold">
 							Photo URL or Base64
 						</label>
@@ -84,7 +87,7 @@
 								placeholder="Image URL or click upload"
 							/>
 							<label
-								class="btn btn-outline-secondary mb-0 d-flex align-items-center"
+								class="btn btn-outline theme-secondary mb-0 d-flex align-items-center"
 							>
 								<span
 									class="material-symbols-outlined"
@@ -106,7 +109,7 @@
 						v-if="form.photoUrl"
 						class="col-12"
 					>
-						<label class="form-label small text-secondary">
+						<label class="form-label small fg-secondary">
 							Photo Preview
 						</label>
 						<div
@@ -121,7 +124,7 @@
 							/>
 							<button
 								type="button"
-								class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1 rounded-circle p-1 d-flex align-items-center"
+								class="btn btn-solid theme-danger btn-sm position-absolute top-0 end-0 m-1 rounded-circle p-1 d-flex align-items-center"
 								@click="form.photoUrl = ''"
 							>
 								<span
@@ -144,11 +147,11 @@
 					</div>
 				</div>
 
-				<h6 class="text-primary fw-bold mb-3 border-bottom pb-2">
+				<h6 class="fg-primary fw-bold mb-5 border-bottom pb-3">
 					2. Coordinates & Location Picker
 				</h6>
-				<div class="row g-3 mb-4">
-					<div class="col-md-6">
+				<div class="row g-5 mb-7">
+					<div class="md:col-6">
 						<label class="form-label small fw-bold">Latitude</label>
 						<input
 							v-model.number="form.latitude"
@@ -158,8 +161,10 @@
 							required
 						/>
 					</div>
-					<div class="col-md-6">
-						<label class="form-label small fw-bold">Longitude</label>
+					<div class="md:col-6">
+						<label class="form-label small fw-bold"
+							>Longitude</label
+						>
 						<input
 							v-model.number="form.longitude"
 							type="number"
@@ -169,7 +174,7 @@
 						/>
 					</div>
 					<div class="col-12">
-						<label class="form-label small text-secondary">
+						<label class="form-label small fg-secondary">
 							Map Picker (Click map to autofill coordinates)
 						</label>
 						<div
@@ -187,25 +192,25 @@
 					</div>
 				</div>
 
-				<h6 class="text-primary fw-bold mb-3 border-bottom pb-2">
+				<h6 class="fg-primary fw-bold mb-5 border-bottom pb-3">
 					3. Supported Payment Methods
 				</h6>
-				<div class="mb-4">
-					<div class="d-flex flex-wrap gap-3">
+				<div class="mb-7">
+					<div class="d-flex flex-wrap gap-5">
 						<div
 							v-for="method in availablePaymentOptions"
 							:key="method.key"
-							class="form-check"
+							class="form-field"
 						>
 							<input
 								:id="'pay-' + method.key"
 								v-model="form.paymentMethods"
 								type="checkbox"
-								class="form-check-input"
+								class="check"
 								:value="method.key"
 							/>
 							<label
-								class="form-check-label small d-flex align-items-center"
+								class="small d-flex align-items-center"
 								:for="'pay-' + method.key"
 							>
 								<span
@@ -220,19 +225,19 @@
 					</div>
 					<div
 						v-if="form.paymentMethods.length === 0"
-						class="text-danger small mt-2"
+						class="fg-danger small mt-3"
 					>
 						Please check at least one payment option.
 					</div>
 				</div>
 
 				<h6
-					class="text-primary fw-bold mb-3 border-bottom pb-2 d-flex justify-content-between align-items-center"
+					class="fg-primary fw-bold mb-5 border-bottom pb-3 d-flex justify-content-between align-items-center"
 				>
 					<span>4. Rack Sections & Rates</span>
 					<button
 						type="button"
-						class="btn btn-sm btn-outline-primary py-0.5 d-flex align-items-center"
+						class="btn btn-sm btn-outline theme-primary py-1 d-flex align-items-center"
 						@click="addNewRateSection"
 					>
 						<span
@@ -247,7 +252,7 @@
 
 				<div
 					v-if="form.rates.length === 0"
-					class="alert alert-warning small"
+					class="alert theme-warning small"
 				>
 					At least one rack/section rate structure is required. Click
 					"Add Section" above.
@@ -267,10 +272,10 @@
 					@remove-section="removeRateSection(rateIndex)"
 				/>
 
-				<div class="mt-4 pt-3 border-top d-flex gap-2">
+				<div class="mt-7 pt-5 border-top d-flex gap-3">
 					<button
 						type="submit"
-						class="btn btn-primary px-4 py-2"
+						class="btn btn-solid theme-primary px-7 py-3"
 						:disabled="submitting || form.rates.length === 0"
 					>
 						<span
@@ -288,7 +293,7 @@
 					</button>
 					<button
 						type="button"
-						class="btn btn-outline-secondary px-4 py-2"
+						class="btn btn-outline theme-secondary px-7 py-3"
 						@click="resetForm"
 					>
 						Reset Form
@@ -324,6 +329,7 @@
 	const submitting = ref(false);
 	const fileInput = ref<HTMLInputElement | null>(null);
 	const adminMapCenter = ref<[number, number]>([35.7289, 139.7104]);
+	let preserveMapViewportForNextCoordinateChange = false;
 	const countries = ['Japan', 'United States', 'United Kingdom'];
 
 	const getEmptyForm = (): ParkingLocationForm => ({
@@ -366,11 +372,9 @@
 	watch(
 		() => props.initialLocation,
 		(location) => {
-			form.value = location ? cloneLocationForForm(location) : getEmptyForm();
-			adminMapCenter.value = [
-				form.value.latitude,
-				form.value.longitude,
-			];
+			form.value =
+				location ? cloneLocationForForm(location) : getEmptyForm();
+			adminMapCenter.value = [form.value.latitude, form.value.longitude];
 			if (fileInput.value) {
 				fileInput.value.value = '';
 			}
@@ -404,9 +408,16 @@
 	});
 
 	watch(enteredCoordinates, (coordinates) => {
-		if (coordinates) {
-			adminMapCenter.value = coordinates;
+		if (!coordinates) {
+			return;
 		}
+
+		if (preserveMapViewportForNextCoordinateChange) {
+			preserveMapViewportForNextCoordinateChange = false;
+			return;
+		}
+
+		adminMapCenter.value = coordinates;
 	});
 
 	const onCountryChange = () => {
@@ -434,8 +445,13 @@
 	};
 
 	const onAdminMapClicked = (coordinates: { lat: number; lng: number }) => {
+		preserveMapViewportForNextCoordinateChange = true;
 		form.value.latitude = parseFloat(coordinates.lat.toFixed(6));
 		form.value.longitude = parseFloat(coordinates.lng.toFixed(6));
+
+		void nextTick(() => {
+			preserveMapViewportForNextCoordinateChange = false;
+		});
 	};
 
 	const onPhotoUpload = (event: Event) => {
@@ -573,9 +589,11 @@
 			chargeSteps: rate.chargeSteps.map((step, stepIndex) => ({
 				durationMinutes: step.durationMinutes,
 				rate: step.rate,
-				...((stepIndex === rate.chargeSteps.length - 1
+				...((
+					stepIndex === rate.chargeSteps.length - 1
 					&& Number(step.rate) !== 0
-					&& step.isRecurring === true) ?
+					&& step.isRecurring === true
+				) ?
 					{ isRecurring: true }
 				:	{}),
 			})),
@@ -615,7 +633,9 @@
 
 	const resetForm = () => {
 		form.value =
-			props.initialLocation ? cloneLocationForForm(props.initialLocation) : getEmptyForm();
+			props.initialLocation ?
+				cloneLocationForForm(props.initialLocation)
+			:	getEmptyForm();
 		adminMapCenter.value = [form.value.latitude, form.value.longitude];
 		if (fileInput.value) {
 			fileInput.value.value = '';

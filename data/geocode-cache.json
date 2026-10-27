@@ -1,0 +1,169 @@
+{
+  "version": 1,
+  "entries": {
+    "ddbb3442bc6fbed8e9285e8349e987c58b0d366fb4d93fdc605e293693e0ab52": {
+      "query": "ikebukro",
+      "cachedAt": "2026-10-26T18:32:56.074Z",
+      "results": []
+    },
+    "ad216c4b5d270ff19a3d9a988a9d3e6df320865beb3dedc173870ef0e334f8f8": {
+      "query": "ikebukuro",
+      "cachedAt": "2026-10-26T18:33:00.551Z",
+      "results": [
+        {
+          "place_id": 263382638,
+          "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+          "osm_type": "way",
+          "osm_id": 99289007,
+          "lat": "35.7297986",
+          "lon": "139.7102422",
+          "class": "building",
+          "type": "train_station",
+          "place_rank": 30,
+          "importance": 0.5575987646218611,
+          "addresstype": "building",
+          "name": "池袋",
+          "display_name": "池袋, みずき通り, 西池袋一丁目, 西池袋, 豊島区, 東京都, 171-0021, 日本",
+          "boundingbox": [
+            "35.7280276",
+            "35.7315479",
+            "139.7089260",
+            "139.7113229"
+          ]
+        },
+        {
+          "place_id": 263379449,
+          "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+          "osm_type": "way",
+          "osm_id": 144131743,
+          "lat": "35.7298752",
+          "lon": "139.7112955",
+          "class": "railway",
+          "type": "platform",
+          "place_rank": 30,
+          "importance": 0.5575987646218611,
+          "addresstype": "railway",
+          "name": "池袋",
+          "display_name": "池袋, Entrace Footway, 西池袋一丁目, 西池袋, 豊島区, 東京都, 171-0021, 日本",
+          "boundingbox": [
+            "35.7279821",
+            "35.7307755",
+            "139.7102534",
+            "139.7117967"
+          ]
+        },
+        {
+          "place_id": 263375845,
+          "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+          "osm_type": "node",
+          "osm_id": 1951959624,
+          "lat": "35.7312233",
+          "lon": "139.7089976",
+          "class": "railway",
+          "type": "stop",
+          "place_rank": 30,
+          "importance": 0.5575987646218611,
+          "addresstype": "railway",
+          "name": "池袋",
+          "display_name": "池袋, みずき通り, 西池袋一丁目, 西池袋, 豊島区, 東京都, 171-0021, 日本",
+          "boundingbox": [
+            "35.7311733",
+            "35.7312733",
+            "139.7089476",
+            "139.7090476"
+          ]
+        },
+        {
+          "place_id": 263374871,
+          "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+          "osm_type": "node",
+          "osm_id": 1926376083,
+          "lat": "35.7296430",
+          "lon": "139.7096856",
+          "class": "railway",
+          "type": "station",
+          "place_rank": 30,
+          "importance": 0.5575987646218611,
+          "addresstype": "railway",
+          "name": "池袋",
+          "display_name": "池袋, メトロポリタン通り, 西池袋一丁目, 西池袋, 豊島区, 東京都, 171-0021, 日本",
+          "boundingbox": [
+            "35.7246430",
+            "35.7346430",
+            "139.7046856",
+            "139.7146856"
+          ]
+        },
+        {
+          "place_id": 267914030,
+          "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+          "osm_type": "node",
+          "osm_id": 2558121915,
+          "lat": "35.7301850",
+          "lon": "139.7111512",
+          "class": "railway",
+          "type": "station",
+          "place_rank": 30,
+          "importance": 0.5575987646218611,
+          "addresstype": "railway",
+          "name": "池袋",
+          "display_name": "池袋, Entrace Footway, 西池袋一丁目, 西池袋, 豊島区, 東京都, 171-0021, 日本",
+          "boundingbox": [
+            "35.7251850",
+            "35.7351850",
+            "139.7061512",
+            "139.7161512"
+          ]
+        }
+      ]
+    },
+    "18ee24150dcb1d96752a4d6dd0f20dfd8ba8c38527e40aa8509b7adecf78f9c6": {
+      "query": "sdf",
+      "cachedAt": "2026-10-27T15:33:45.475Z",
+      "results": [
+        {
+          "place_id": 98405025,
+          "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+          "osm_type": "way",
+          "osm_id": 64003104,
+          "lat": "48.9244726",
+          "lon": "2.3601325",
+          "class": "leisure",
+          "type": "stadium",
+          "place_rank": 30,
+          "importance": 0.6294642130361772,
+          "addresstype": "leisure",
+          "name": "Stade de France",
+          "display_name": "Stade de France, Avenue du Stade de France, Franc-Moisin - Bel-Air - Stade de France, Saint-Denis, Seine-Saint-Denis, Île-de-France, France métropolitaine, 93200, France",
+          "boundingbox": [
+            "48.9230105",
+            "48.9259293",
+            "2.3581704",
+            "2.3620928"
+          ]
+        },
+        {
+          "place_id": 339082506,
+          "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+          "osm_type": "way",
+          "osm_id": 189482707,
+          "lat": "38.1716962",
+          "lon": "-85.7354076",
+          "class": "aeroway",
+          "type": "aerodrome",
+          "place_rank": 30,
+          "importance": 0.4559610433226866,
+          "addresstype": "aeroway",
+          "name": "Louisville Muhammad Ali International Airport",
+          "display_name": "Louisville Muhammad Ali International Airport, 600, Terminal Drive, Louisville, Jefferson County, Kentucky, 40209, United States",
+          "boundingbox": [
+            "38.1533913",
+            "38.1900081",
+            "-85.7561217",
+            "-85.7208896"
+          ]
+        }
+      ]
+    }
+  }
+}

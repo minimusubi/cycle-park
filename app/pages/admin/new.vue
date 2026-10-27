@@ -2,7 +2,7 @@
 	<div class="d-flex flex-column min-vh-100 bg-body">
 		<AppNavbar />
 
-		<main class="container py-4 flex-grow-1">
+		<main class="container py-7 flex-grow-1">
 			<AdminParkingLotForm @saved="onSaved" />
 		</main>
 	</div>

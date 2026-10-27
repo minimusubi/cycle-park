@@ -1,9 +1,12 @@
+import {
+	DATA_STORE_DIRECTORY,
+	getDataStorePath,
+} from '../utils/data-store-path';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { randomUUID } from 'node:crypto';
 import { readBody } from 'h3';
 
-const DB_DIR = join(process.cwd(), 'shared', 'data');
-const DB_PATH = join(DB_DIR, 'parking.json');
+const DB_PATH = getDataStorePath('parking.json');
 
 const sanitizeRates = (rates: PricingRate[]): PricingRate[] =>
 	rates.map((rate) => ({
@@ -48,20 +51,20 @@ export default defineEventHandler(async (event) => {
 	}
 
 	// Ensure DB exists
-	if (!existsSync(DB_DIR)) {
-		mkdirSync(DB_DIR, { recursive: true });
+	if (!existsSync(DATA_STORE_DIRECTORY)) {
+		mkdirSync(DATA_STORE_DIRECTORY, { recursive: true });
 	}
 
 	let locations: ParkingLocation[] = [];
 	if (existsSync(DB_PATH)) {
 		try {
 			locations = JSON.parse(readFileSync(DB_PATH, 'utf-8'));
-		} catch (e) {
+		} catch {
 			locations = [];
 		}
 	}
 
-	const id = body.id || `lot-${Date.now()}`;
+	const id = body.id || `${randomUUID()}`;
 	const now = new Date().toISOString();
 
 	const newLocation: ParkingLocation = {

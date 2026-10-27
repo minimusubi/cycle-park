@@ -2,19 +2,19 @@
 	<div class="d-flex flex-column min-vh-100 bg-body">
 		<AppNavbar />
 
-		<main class="container py-4 flex-grow-1">
+		<main class="container py-7 flex-grow-1">
 			<div
-				class="d-flex flex-column flex-lg-row gap-3 justify-content-between align-items-lg-center mb-4"
+				class="d-flex flex-column lg:flex-row gap-5 justify-content-between lg:align-items-center mb-7"
 			>
 				<div>
-					<p class="admin-kicker text-secondary mb-1">
+					<p class="admin-kicker fg-secondary mb-1">
 						Parking Lot Management
 					</p>
 					<h1 class="h3 fw-bold mb-0">Bicycle Parking Lots</h1>
 				</div>
 				<NuxtLink
 					to="/admin/new"
-					class="btn btn-primary d-inline-flex align-items-center justify-content-center"
+					class="btn btn-solid theme-primary d-inline-flex align-items-center justify-content-center"
 				>
 					<span
 						class="material-symbols-outlined me-1"
@@ -26,10 +26,10 @@
 				</NuxtLink>
 			</div>
 
-			<div class="card shadow border-0 rounded-3">
-				<div class="card-body p-3 p-md-4">
-					<div class="row g-3 align-items-end mb-4">
-						<div class="col-12 col-lg-8">
+			<div class="card shadow border-0 rounded-5">
+				<div class="card-body p-5 md:p-7">
+					<div class="row g-5 align-items-end mb-7">
+						<div class="col-12 lg:col-8">
 							<label class="form-label small fw-bold">
 								Search lots
 							</label>
@@ -50,13 +50,13 @@
 								/>
 							</div>
 						</div>
-						<div class="col-12 col-sm-6 col-lg-2">
+						<div class="col-12 sm:col-6 lg:col-2">
 							<label class="form-label small fw-bold">
 								Country
 							</label>
 							<select
 								v-model="selectedCountry"
-								class="form-select"
+								class="form-control"
 							>
 								<option value="">All countries</option>
 								<option
@@ -68,10 +68,10 @@
 								</option>
 							</select>
 						</div>
-						<div class="col-12 col-sm-6 col-lg-2">
+						<div class="col-12 sm:col-6 lg:col-2">
 							<button
 								type="button"
-								class="btn btn-outline-secondary w-100"
+								class="btn btn-outline theme-secondary w-100"
 								:disabled="!hasActiveFilters"
 								@click="clearFilters"
 							>
@@ -81,34 +81,34 @@
 					</div>
 
 					<div
-						class="d-flex justify-content-between align-items-center mb-3"
+						class="d-flex justify-content-between align-items-center mb-5"
 					>
-						<span class="text-secondary small">
+						<span class="fg-secondary small">
 							Showing {{ filteredLocations.length }} of
 							{{ locationsList.length }} lots
 						</span>
 						<span
 							v-if="loadingList"
-							class="spinner-border spinner-border-sm text-primary"
+							class="spinner-border spinner-border-sm fg-primary"
 						></span>
 					</div>
 
 					<div
 						v-if="loadingList"
-						class="text-center py-5"
+						class="text-center py-12"
 					>
 						<div
-							class="spinner-border text-primary"
+							class="spinner-border fg-primary"
 							role="status"
 						></div>
-						<p class="mt-2 text-secondary mb-0">
+						<p class="mt-3 fg-secondary mb-0">
 							Loading parking list...
 						</p>
 					</div>
 
 					<div
 						v-else-if="filteredLocations.length === 0"
-						class="text-center py-5 text-secondary"
+						class="text-center py-12 fg-secondary"
 					>
 						<span
 							class="material-symbols-outlined"
@@ -116,17 +116,17 @@
 						>
 							info
 						</span>
-						<p class="mt-2 mb-0">No matching parking lots found.</p>
+						<p class="mt-3 mb-0">No matching parking lots found.</p>
 					</div>
 
 					<div
 						v-else
-						class="row g-3"
+						class="row g-5"
 					>
 						<div
 							v-for="location in filteredLocations"
 							:key="location.id"
-							class="col-12 col-lg-6"
+							class="col-12 lg:col-6"
 						>
 							<AdminParkingLotCard
 								:location="location"
@@ -203,7 +203,8 @@
 	const fetchLocations = async () => {
 		loadingList.value = true;
 		try {
-			locationsList.value = await $fetch<ParkingLocation[]>('/api/parking');
+			locationsList.value =
+				await $fetch<ParkingLocation[]>('/api/parking');
 		} catch (error) {
 			console.error('Failed to load locations list', error);
 		} finally {

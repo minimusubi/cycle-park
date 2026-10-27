@@ -1,14 +1,14 @@
 <template>
-	<div class="card admin-surface-card mb-3 shadow-xs">
+	<div class="card admin-surface-card mb-5 shadow-xs">
 		<div
-			class="card-header d-flex justify-content-between align-items-center py-2 bg-body-tertiary"
+			class="card-header d-flex flex-row justify-content-between align-items-center py-3 bg-3"
 		>
-			<strong class="small text-secondary">
+			<strong class="small fg-secondary">
 				Rack Section #{{ index + 1 }}
 			</strong>
 			<button
 				type="button"
-				class="btn btn-sm btn-link text-danger p-0 d-flex align-items-center border-0 text-decoration-none"
+				class="btn btn-sm btn-link fg-danger p-0 d-flex align-items-center border-0 text-decoration-none"
 				@click="$emit('remove-section')"
 			>
 				<span
@@ -20,8 +20,8 @@
 			</button>
 		</div>
 
-		<div class="card-body p-3">
-			<div class="row g-2 mb-3">
+		<div class="card-body p-5">
+			<div class="row g-3 mb-5">
 				<div class="col-12">
 					<label class="form-label small fw-bold">Section Name</label>
 					<input
@@ -34,16 +34,16 @@
 				</div>
 			</div>
 
-			<div class="border-top pt-2">
+			<div class="border-top pt-3">
 				<div
-					class="d-flex justify-content-between align-items-center mb-2"
+					class="d-flex justify-content-between align-items-center mb-3"
 				>
-					<span class="fw-bold text-secondary admin-kicker">
+					<span class="fw-bold fg-secondary admin-kicker">
 						Charge Steps Queue
 					</span>
 					<button
 						type="button"
-						class="btn btn-xs btn-outline-secondary py-0.5 d-flex align-items-center"
+						class="btn btn-xs btn-outline theme-secondary py-1 d-flex align-items-center"
 						style="font-size: 0.7rem"
 						@click="$emit('add-step')"
 					>
@@ -58,7 +58,7 @@
 
 				<div
 					v-if="rate.chargeSteps.length === 0"
-					class="text-danger small mb-2"
+					class="fg-danger small mb-3"
 					style="font-size: 0.72rem"
 				>
 					Requires at least one charge step.
@@ -67,11 +67,11 @@
 				<div
 					v-for="(step, stepIndex) in rate.chargeSteps"
 					:key="stepIndex"
-					class="row g-2 align-items-center mb-2 p-2 border rounded bg-body-tertiary shadow-xs"
+					class="row g-3 align-items-center mb-3 p-3 border rounded bg-3 shadow-xs"
 				>
 					<div class="col-auto">
 						<span
-							class="badge bg-secondary"
+							class="badge theme-secondary"
 							style="font-size: 0.7rem"
 						>
 							Step {{ stepIndex + 1 }}
@@ -82,7 +82,7 @@
 						class="col-auto"
 					>
 						<span
-							class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25"
+							class="badge badge-subtle theme-success"
 							style="font-size: 0.65rem"
 						>
 							Free
@@ -100,7 +100,7 @@
 								placeholder="Mins"
 							/>
 							<span
-								class="input-group-text px-1.5"
+								class="input-group-text px-2"
 								style="font-size: 0.7rem"
 								>mins</span
 							>
@@ -110,7 +110,7 @@
 						<label class="form-label d-none">Rate</label>
 						<div class="input-group input-group-sm">
 							<span
-								class="input-group-text px-1.5"
+								class="input-group-text px-2"
 								style="font-size: 0.7rem"
 							>
 								{{ currencySymbol }}
@@ -126,17 +126,17 @@
 						</div>
 					</div>
 					<div class="col-auto d-flex align-items-center">
-						<div class="form-check mb-0">
+						<div class="form-field mb-0">
 							<template v-if="isLastStep(stepIndex)">
 								<input
 									:id="`rec-${index}-${stepIndex}`"
 									v-model="step.isRecurring"
 									type="checkbox"
-									class="form-check-input"
+									class="check"
 									:disabled="step.rate === 0"
 								/>
 								<label
-									class="form-check-label text-nowrap"
+									class="text-nowrap"
 									:for="`rec-${index}-${stepIndex}`"
 									style="font-size: 0.75rem"
 								>
@@ -145,7 +145,7 @@
 							</template>
 							<span
 								v-else
-								class="text-secondary text-nowrap"
+								class="fg-secondary text-nowrap"
 								style="font-size: 0.75rem"
 							>
 								One-time
@@ -155,7 +155,7 @@
 					<div class="col-auto">
 						<button
 							type="button"
-							class="btn btn-sm btn-link text-danger p-0 border-0"
+							class="btn btn-sm btn-link fg-danger p-0 border-0"
 							@click="$emit('remove-step', stepIndex)"
 						>
 							<span
@@ -168,38 +168,36 @@
 				</div>
 
 				<div
-					class="text-secondary small mb-2"
+					class="fg-secondary small mb-3"
 					style="font-size: 0.72rem"
 				>
 					Use a non-recurring step with cost 0 for an initial free
 					period.
 				</div>
 
-				<div class="bg-body-tertiary border rounded p-2 mt-2">
-					<span
-						class="fw-bold text-secondary text-uppercase d-block mb-1"
-						style="font-size: 0.65rem; letter-spacing: 0.5px"
-					>
-						Live Price Simulation Preview
-					</span>
+				<span
+					class="fw-bold fg-secondary text-uppercase d-block mb-1"
+					style="font-size: 0.65rem; letter-spacing: 0.5px"
+				>
+					Price Preview
+				</span>
+				<div
+					class="d-flex justify-content-between text-center small text-nowrap gap-1"
+				>
 					<div
-						class="d-flex justify-content-between text-center small text-nowrap gap-1"
+						v-for="preset in simulationPresets"
+						:key="preset.minutes"
+						class="border rounded p-1 flex-fill bg-body"
 					>
 						<div
-							v-for="preset in simulationPresets"
-							:key="preset.minutes"
-							class="border rounded p-1 flex-fill bg-body"
+							class="fg-secondary"
+							style="font-size: 0.65rem"
 						>
-							<div
-								class="text-secondary"
-								style="font-size: 0.65rem"
-							>
-								{{ preset.label }}
-							</div>
-							<strong class="text-success">
-								{{ formatSimPrice(rate, preset.minutes) }}
-							</strong>
+							{{ preset.label }}
 						</div>
+						<strong class="fg-success">
+							{{ formatSimPrice(rate, preset.minutes) }}
+						</strong>
 					</div>
 				</div>
 			</div>
@@ -209,9 +207,9 @@
 
 <script lang="ts" setup>
 	defineEmits<{
-		(e: 'add-step'): void;
-		(e: 'remove-step', stepIndex: number): void;
-		(e: 'remove-section'): void;
+		'add-step': [];
+		'remove-step': [stepIndex: number];
+		'remove-section': [];
 	}>();
 
 	const props = defineProps<{
@@ -223,7 +221,8 @@
 
 	const simulationPresets = [
 		{ label: '1 Hour', minutes: 60 },
-		{ label: '3 Hours', minutes: 180 },
+		{ label: '2 Hours', minutes: 120 },
+		{ label: '4 Hours', minutes: 480 },
 		{ label: '8 Hours', minutes: 480 },
 		{ label: '24 Hours', minutes: 1440 },
 	];

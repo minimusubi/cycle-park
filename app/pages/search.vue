@@ -5,14 +5,14 @@
 		<div class="container-fluid flex-grow-1 p-0">
 			<div class="row g-0 search-container">
 				<div
-					class="col-12 col-md-5 col-lg-4 d-flex flex-column results-sidebar p-3"
+					class="col-12 md:col-5 lg:col-4 d-flex flex-column results-sidebar p-5"
 				>
 					<div
-						class="card shadow-sm border border-secondary border-opacity-10 mb-3 rounded-3"
+						class="card shadow-sm border border-secondary border-10 mb-5 rounded-5"
 					>
-						<div class="card-body p-3">
+						<div class="card-body p-5">
 							<h6
-								class="card-title fw-bold mb-3 d-flex align-items-center text-primary"
+								class="card-title fw-bold mb-5 d-flex align-items-center fg-primary"
 							>
 								<span class="material-symbols-outlined me-1">
 									search
@@ -22,7 +22,7 @@
 
 							<LocationSearchInput
 								v-model="addressInput"
-								class="mb-3"
+								class="mb-5"
 								label="Destination Address"
 								placeholder="Enter station, place or address..."
 								:results="geocodeResults"
@@ -39,7 +39,7 @@
 								v-model:slider-value="sliderValue"
 								v-model:hours="durationHours"
 								v-model:minutes="durationMinutes"
-								class="mb-3"
+								class="mb-5"
 								label="Stay Duration"
 								:presets="durationPresets"
 								@slider-input="onSliderInput"
@@ -51,22 +51,22 @@
 					</div>
 
 					<div
-						class="d-flex justify-content-between align-items-center mb-2 px-1"
+						class="d-flex justify-content-between align-items-center mb-3 px-1"
 					>
-						<span class="fw-bold text-secondary admin-kicker">
+						<span class="fw-bold fg-secondary admin-kicker">
 							Parking Nearby ({{
 								visibleParkingLocations.length
 							}})
 						</span>
 						<span
 							v-if="loading"
-							class="spinner-border spinner-border-sm text-primary"
+							class="spinner-border spinner-border-sm fg-primary"
 						></span>
 					</div>
 
 					<div
 						v-if="!loading && visibleParkingLocations.length === 0"
-						class="text-center py-5 my-3 text-secondary"
+						class="text-center py-12 my-5 fg-secondary"
 					>
 						<span
 							class="material-symbols-outlined"
@@ -74,10 +74,10 @@
 						>
 							info
 						</span>
-						<p class="mt-2 mb-0">
+						<p class="mt-3 mb-0">
 							No parking lots found within 2 km.
 						</p>
-						<p class="small text-secondary">
+						<p class="small fg-secondary">
 							Try moving the map or searching a different area.
 							Farther parking may still appear on the map.
 						</p>
@@ -97,7 +97,7 @@
 					</div>
 				</div>
 
-				<div class="col-12 col-md-7 col-lg-8 map-pane">
+				<div class="col-12 md:col-7 lg:col-8 map-pane">
 					<MapClient
 						:center="mapCenter"
 						:zoom="mapZoom"
@@ -113,6 +113,8 @@
 </template>
 
 <script lang="ts" setup>
+	import type { GeocodeResult } from '#shared/types/geocode';
+
 	const route = useRoute();
 	const router = useRouter();
 
@@ -125,10 +127,10 @@
 	const mapZoom = ref(15);
 	const searchDestination = ref<[number, number] | null>([35.7289, 139.7104]);
 
-	const geocodeResults = ref<any[]>([]);
+	const geocodeResults = ref<GeocodeResult[]>([]);
 	const geocodeLoading = ref(false);
 	const showGeocodeDropdown = ref(false);
-	let geocodeTimeout: any = null;
+	let geocodeTimeout: ReturnType<typeof setTimeout> | null = null;
 
 	const parkingLocations = ref<ParkingLocation[]>([]);
 	const loading = ref(false);
@@ -309,8 +311,9 @@
 		geocodeTimeout = setTimeout(async () => {
 			geocodeLoading.value = true;
 			try {
-				const queryUrl = `https://nominatim.openstreetmap.org/search?format=json&limit=5&q=${encodeURIComponent(addressInput.value)}`;
-				const response = await $fetch<any[]>(queryUrl);
+				const response = await $fetch<GeocodeResult[]>('/api/geocode', {
+					query: { q: addressInput.value },
+				});
 				geocodeResults.value = response;
 				showGeocodeDropdown.value = true;
 			} catch (e) {
@@ -321,7 +324,7 @@
 		}, 400);
 	};
 
-	const selectAddress = (res: any) => {
+	const selectAddress = (res: GeocodeResult) => {
 		const lat = parseFloat(res.lat);
 		const lng = parseFloat(res.lon);
 

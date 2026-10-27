@@ -1,15 +1,15 @@
 <template>
 	<div
-		class="admin-lot-card border rounded-3 p-3 mb-3 bg-body hover-shadow transition"
+		class="admin-lot-card border rounded-5 p-5 mb-5 bg-body hover-shadow transition"
 		:class="{ selected }"
 	>
-		<div class="d-flex justify-content-between align-items-start mb-2">
+		<div class="d-flex justify-content-between align-items-start mb-3">
 			<div>
-				<h6 class="fw-bold mb-0 text-body">
+				<h6 class="fw-bold mb-0 fg-body">
 					{{ location.name }}
 				</h6>
 				<span
-					class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-20 px-2 py-0.5 rounded-pill mt-1"
+					class="badge bg-secondary bg-10 fg-secondary border border-secondary border-20 px-3 py-1 rounded-pill mt-1"
 					style="font-size: 0.65rem"
 				>
 					<span
@@ -22,7 +22,7 @@
 			</div>
 			<div class="d-flex gap-1">
 				<button
-					class="btn btn-sm btn-outline-primary d-flex align-items-center p-1.5"
+					class="btn btn-sm btn-outline theme-primary d-flex align-items-center p-2"
 					title="Edit"
 					@click="$emit('edit', location)"
 				>
@@ -33,7 +33,7 @@
 					>
 				</button>
 				<button
-					class="btn btn-sm btn-outline-danger d-flex align-items-center p-1.5"
+					class="btn btn-sm btn-outline theme-danger d-flex align-items-center p-2"
 					title="Delete"
 					@click="$emit('delete', location)"
 				>
@@ -46,27 +46,27 @@
 			</div>
 		</div>
 
-		<p class="text-secondary small mb-2">
+		<p class="fg-secondary small mb-3">
 			{{ location.address }}
 		</p>
 		<p
 			v-if="location.notes"
-			class="small mb-2 text-body"
+			class="small mb-3 fg-body"
 		>
 			<span class="fw-semibold">Notes:</span>
 			{{ location.notes }}
 		</p>
 		<div
-			class="d-flex justify-content-between text-secondary small gap-3"
+			class="d-flex justify-content-between fg-secondary small gap-5"
 			style="font-size: 0.72rem"
 		>
 			<span>Hrs: {{ location.hoursOfOperation }}</span>
 			<span>Updated: {{ formattedUpdatedDate }}</span>
 		</div>
 
-		<div class="mt-2 pt-2 border-top">
+		<div class="mt-3 pt-3 border-top">
 			<span
-				class="fw-bold text-secondary text-uppercase d-block admin-kicker"
+				class="fw-bold fg-secondary text-uppercase d-block admin-kicker"
 			>
 				Rack Sub-options & Cost structures
 			</span>
@@ -74,7 +74,7 @@
 				<span
 					v-for="rate in location.rates"
 					:key="rate.id"
-					class="badge bg-body-tertiary border text-body text-xs py-1 px-1.5"
+					class="badge bg-3 border fg-body text-xs py-1 px-2"
 					style="font-size: 0.65rem"
 				>
 					{{ rate.name }} ({{ formatRateSummary(rate) }})

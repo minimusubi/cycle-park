@@ -1,8 +1,8 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import { getDataStorePath } from '../utils/data-store-path';
 import { getQuery } from 'h3';
-import { join } from 'node:path';
 
-const DB_PATH = join(process.cwd(), 'shared', 'data', 'parking.json');
+const DB_PATH = getDataStorePath('parking.json');
 
 export default defineEventHandler((event) => {
 	const query = getQuery(event);
@@ -22,10 +22,10 @@ export default defineEventHandler((event) => {
 		});
 	}
 
-	let locations: ParkingLocation[] = [];
+	let locations: ParkingLocation[];
 	try {
 		locations = JSON.parse(readFileSync(DB_PATH, 'utf-8'));
-	} catch (e) {
+	} catch {
 		throw createError({
 			statusCode: 500,
 			statusMessage: 'Error parsing database',

@@ -8,7 +8,7 @@
 
 		<div
 			v-if="interactiveMode"
-			class="position-absolute bottom-0 start-50 translate-middle-x mb-3 bg-dark text-white px-3 py-2 rounded-pill shadow-lg border border-secondary text-nowrap pointer-events-none"
+			class="position-absolute bottom-0 start-50 translate-middle-x mb-12 bg-black fg-white px-12 py-5 rounded-pill shadow-lg border border-secondary text-nowrap pointer-events-none"
 			style="z-index: 10; font-size: 0.85rem; opacity: 0.9"
 		>
 			<span
@@ -102,7 +102,7 @@
 		wrapper.className = 'maplibre-marker-wrapper';
 
 		const marker = document.createElement('div');
-		marker.className = `custom-marker-pin ${markerClass} text-white shadow-md border border-2 border-white`;
+		marker.className = `custom-marker-pin ${markerClass} fg-white shadow-md border border-2 border-white`;
 		marker.style.width = `${size}px`;
 		marker.style.height = `${size}px`;
 		marker.style.borderRadius = '50%';
@@ -117,7 +117,7 @@
 		if (priceLabel) {
 			const badge = document.createElement('div');
 			badge.className =
-				'bg-dark text-white rounded-pill px-2 mt-1 border border-secondary shadow-sm text-nowrap text-center';
+				'bg-black fg-white rounded-pill px-5 mt-1 border border-secondary shadow-sm text-nowrap text-center';
 			badge.style.fontSize = '0.7rem';
 			badge.style.fontWeight = 'bold';
 			badge.style.width = 'fit-content';
@@ -280,7 +280,7 @@
 			.setLngLat([lng, lat])
 			.setPopup(
 				new maplibregl.Popup({ offset: 20 }).setHTML(
-					'<strong class="text-danger">Search Destination</strong>',
+					'<strong class="fg-danger">Search Destination</strong>',
 				),
 			)
 			.addTo(map);
@@ -309,12 +309,12 @@
 
 			const popupContent = `
       <div style="font-family: 'Inter', sans-serif; min-width: 180px;">
-        <h6 class="mb-1 text-primary fw-bold">${pin.name}</h6>
-        <p class="mb-1 text-secondary" style="font-size: 0.8rem;">
+        <h6 class="mb-1 fg-primary fw-bold">${pin.name}</h6>
+        <p class="mb-1 fg-secondary" style="font-size: 0.8rem;">
           <span class="material-symbols-outlined me-1" style="font-size: 0.9rem;">location_on</span>${pin.address}
         </p>
-        ${pin.priceLabel ? `<div class="mt-2 text-success fw-bold" style="font-size: 0.95rem;">Cost: ${pin.priceLabel}</div>` : ''}
-        <button data-pin-id="${pin.id}" class="btn btn-sm btn-primary w-100 mt-2 py-1 map-popup-detail-button" style="font-size: 0.75rem;">View Details</button>
+        ${pin.priceLabel ? `<div class="mt-5 fg-success fw-bold" style="font-size: 0.95rem;">Cost: ${pin.priceLabel}</div>` : ''}
+        <button data-pin-id="${pin.id}" class="btn btn-sm btn-solid theme-primary w-100 mt-5 py-1 map-popup-detail-button" style="font-size: 0.75rem;">View Details</button>
       </div>
     `;
 

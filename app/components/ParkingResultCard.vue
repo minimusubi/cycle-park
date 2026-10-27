@@ -1,11 +1,11 @@
 <template>
 	<div
-		class="card parking-card mb-3 shadow-sm"
+		class="card parking-card mb-5 shadow-sm"
 		:class="{ selected }"
 		@click="$emit('select')"
 	>
-		<div class="card-body p-3">
-			<div class="row g-2">
+		<div class="card-body p-5">
+			<div class="row g-3">
 				<div class="col-4">
 					<img
 						:src="photoSrc"
@@ -27,28 +27,28 @@
 							</h6>
 							<span
 								v-if="isCheapest && isClosest"
-								class="badge badge-both text-xs px-2 py-0.5 rounded-pill"
+								class="badge badge-both text-xs px-3 py-1 rounded-pill"
 								style="font-size: 0.65rem"
 							>
 								Cheapest & Closest
 							</span>
 							<span
 								v-else-if="isCheapest"
-								class="badge badge-cheapest text-xs px-2 py-0.5 rounded-pill"
+								class="badge badge-cheapest text-xs px-3 py-1 rounded-pill"
 								style="font-size: 0.65rem"
 							>
 								Cheapest
 							</span>
 							<span
 								v-else-if="isClosest"
-								class="badge badge-closest text-xs px-2 py-0.5 rounded-pill"
+								class="badge badge-closest text-xs px-3 py-1 rounded-pill"
 								style="font-size: 0.65rem"
 							>
 								Closest
 							</span>
 						</div>
 						<p
-							class="text-secondary small mb-1 text-truncate"
+							class="fg-secondary small mb-1 text-truncate"
 							:title="lot.address"
 						>
 							<span
@@ -61,7 +61,7 @@
 						</p>
 						<p
 							v-if="lot.notes"
-							class="text-secondary small mb-1"
+							class="fg-secondary small mb-1"
 						>
 							<span
 								class="material-symbols-outlined align-middle me-1"
@@ -72,9 +72,9 @@
 							{{ lot.notes }}
 						</p>
 
-						<div class="d-flex gap-3 align-items-center mt-1">
+						<div class="d-flex gap-5 align-items-center mt-1">
 							<span
-								class="small fw-semibold text-secondary d-flex align-items-center"
+								class="small fw-semibold fg-secondary d-flex align-items-center"
 							>
 								<span
 									class="material-symbols-outlined align-middle me-1"
@@ -90,7 +90,7 @@
 							</span>
 
 							<span
-								class="fw-bold text-success d-flex align-items-center"
+								class="fw-bold fg-success d-flex align-items-center"
 							>
 								<span
 									class="material-symbols-outlined align-middle me-1"
@@ -106,11 +106,11 @@
 						</div>
 					</div>
 
-					<div class="d-flex gap-1 flex-wrap mt-2">
+					<div class="d-flex gap-1 flex-wrap mt-3">
 						<span
 							v-for="pKey in lot.paymentMethods"
 							:key="pKey"
-							class="badge bg-body-tertiary border text-body text-xs d-inline-flex align-items-center py-0.5 px-1.5"
+							class="badge bg-3 border fg-body text-xs d-inline-flex align-items-center py-1 px-2"
 							style="font-size: 0.65rem"
 							:title="getPaymentName(pKey)"
 						>
@@ -128,29 +128,29 @@
 
 			<div
 				v-if="selected"
-				class="mt-3 pt-3 border-top"
+				class="mt-5 pt-5 border-top"
 				@click.stop
 			>
-				<div class="row g-2">
+				<div class="row g-3">
 					<div class="col-12">
-						<h6 class="fw-bold small text-secondary mb-2">
+						<h6 class="fw-bold small fg-secondary mb-3">
 							Detailed Rates (by Rack Section)
 						</h6>
 						<div
 							v-for="rate in lot.rates"
 							:key="rate.id"
-							class="p-2 border rounded bg-body-tertiary mb-2"
+							class="p-3 border rounded bg-2 mb-3"
 						>
 							<div
 								class="d-flex justify-content-between align-items-center"
 							>
 								<strong class="small">{{ rate.name }}</strong>
-								<span class="text-success fw-bold text-sm">
+								<span class="fg-success fw-bold text-sm">
 									{{ formatRateCost(rate, lot.country) }}
 								</span>
 							</div>
 							<div
-								class="text-secondary"
+								class="fg-secondary"
 								style="font-size: 0.75rem"
 							>
 								{{ formatChargeStepsDesc(rate, lot.country) }}
@@ -160,7 +160,7 @@
 
 					<div class="col-6">
 						<span
-							class="fw-semibold text-secondary"
+							class="fw-semibold fg-secondary"
 							style="font-size: 0.75rem"
 						>
 							HOURS
@@ -171,12 +171,12 @@
 					</div>
 					<div class="col-6">
 						<span
-							class="fw-semibold text-secondary"
+							class="fw-semibold fg-secondary"
 							style="font-size: 0.75rem"
 						>
 							LAST UPDATED
 						</span>
-						<div class="small text-secondary">
+						<div class="small fg-secondary">
 							{{ formatDate(lot.lastUpdated) }}
 						</div>
 					</div>

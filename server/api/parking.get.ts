@@ -1,9 +1,11 @@
+import {
+	DATA_STORE_DIRECTORY,
+	getDataStorePath,
+} from '../utils/data-store-path';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { getQuery } from 'h3';
-import { join } from 'node:path';
 
-const DB_DIR = join(process.cwd(), 'shared', 'data');
-const DB_PATH = join(DB_DIR, 'parking.json');
+const DB_PATH = getDataStorePath('parking.json');
 
 // Seed data
 const SEED_DATA: ParkingLocation[] = [
@@ -96,9 +98,11 @@ const SEED_DATA: ParkingLocation[] = [
 
 export default defineEventHandler((event) => {
 	// Ensure DB directory and file exist
-	if (!existsSync(DB_DIR)) {
-		console.log(`${DB_DIR} does not exist! Creating data directory...`);
-		mkdirSync(DB_DIR, { recursive: true });
+	if (!existsSync(DATA_STORE_DIRECTORY)) {
+		console.log(
+			`${DATA_STORE_DIRECTORY} does not exist! Creating data directory...`,
+		);
+		mkdirSync(DATA_STORE_DIRECTORY, { recursive: true });
 	}
 	if (!existsSync(DB_PATH)) {
 		console.log(`${DB_PATH} does not exist! Creating data file...`);
@@ -107,10 +111,10 @@ export default defineEventHandler((event) => {
 
 	// Load data
 	const dataRaw = readFileSync(DB_PATH, 'utf-8');
-	let locations: ParkingLocation[] = [];
+	let locations: ParkingLocation[];
 	try {
 		locations = JSON.parse(dataRaw);
-	} catch (e) {
+	} catch {
 		locations = SEED_DATA;
 	}
 

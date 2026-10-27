@@ -25,8 +25,17 @@ export default defineNuxtConfig({
 			],
 		},
 	},
-	css: ['maplibre-gl/dist/maplibre-gl.css', '~/styles/global.scss'],
+	css: [
+		'bootstrap/dist/css/bootstrap.css',
+		'maplibre-gl/dist/maplibre-gl.css',
+		'~/styles/global.scss',
+	],
 	runtimeConfig: {
+		nominatimBaseUrl:
+			process.env.NUXT_NOMINATIM_BASE_URL
+			|| 'https://nominatim.openstreetmap.org/search',
+		nominatimUserAgent:
+			process.env.NUXT_NOMINATIM_USER_AGENT || 'CyclePark/1.0',
 		public: {
 			mapStyleUrl:
 				process.env.NUXT_PUBLIC_MAP_STYLE_URL

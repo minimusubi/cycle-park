@@ -6,26 +6,26 @@
 		/>
 
 		<!-- Hero Content -->
-		<div class="container flex-grow-1 d-flex align-items-center py-5">
+		<div class="container flex-grow-1 d-flex align-items-center py-12">
 			<div
-				class="row w-100 align-items-center justify-content-center g-5"
+				class="row w-100 align-items-center justify-content-center g-12"
 			>
 				<!-- Text details -->
-				<div class="col-12 col-lg-6 text-center text-lg-start">
+				<div class="col-12 lg:col-6 text-center lg:text-start">
 					<span
-						class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-20 px-3 py-2 rounded-pill fw-semibold mb-3"
+						class="badge badge-subtle theme-primary px-5 py-3 rounded-pill fw-semibold mb-5"
 					>
 						🚴 Sustainable City Commuting
 					</span>
 					<h1
-						class="display-4 fw-black tracking-tight mb-3"
+						class="hero-title fs-4xl fw-black tracking-tight mb-5"
 						style="font-weight: 850; line-height: 1.1"
 					>
 						Find the Perfect <br />
-						<span class="text-primary">Bicycle Parking</span>
+						<span class="fg-primary">Bicycle Parking</span>
 					</h1>
 					<p
-						class="lead text-secondary mb-4"
+						class="fs-lg fg-secondary mb-7"
 						style="max-width: 500px"
 					>
 						Locate bicycle racks nearby, calculate parking rates
@@ -34,10 +34,10 @@
 					</p>
 
 					<!-- Feature Bullets (Visible on Large Screens) -->
-					<div class="d-none d-lg-flex flex-column gap-3">
+					<div class="d-none lg:d-flex flex-column gap-5">
 						<div class="d-flex align-items-center">
 							<div
-								class="bg-primary bg-opacity-10 text-primary rounded-circle p-2 d-inline-flex me-3"
+								class="bg-primary bg-10 fg-primary rounded-circle p-3 d-inline-flex me-5"
 							>
 								<span class="material-symbols-outlined"
 									>payments</span
@@ -47,7 +47,7 @@
 								<strong class="d-block small"
 									>Dynamic Cost Estimator</strong
 								>
-								<span class="text-muted small"
+								<span class="fg-secondary small"
 									>Input your stay duration to see live rate
 									updates.</span
 								>
@@ -55,7 +55,7 @@
 						</div>
 						<div class="d-flex align-items-center">
 							<div
-								class="bg-success bg-opacity-10 text-success rounded-circle p-2 d-inline-flex me-3"
+								class="bg-success bg-10 fg-success rounded-circle p-3 d-inline-flex me-5"
 							>
 								<span class="material-symbols-outlined"
 									>map</span
@@ -65,7 +65,7 @@
 								<strong class="d-block small"
 									>Interactive MapLibre Map</strong
 								>
-								<span class="text-muted small"
+								<span class="fg-secondary small"
 									>Drop custom destination pins anywhere to
 									search.</span
 								>
@@ -73,7 +73,7 @@
 						</div>
 						<div class="d-flex align-items-center">
 							<div
-								class="bg-warning bg-opacity-10 text-warning rounded-circle p-2 d-inline-flex me-3"
+								class="bg-warning bg-10 fg-warning rounded-circle p-3 d-inline-flex me-5"
 							>
 								<span class="material-symbols-outlined"
 									>credit_card</span
@@ -83,7 +83,7 @@
 								<strong class="d-block small"
 									>Multi-Currency & Payments</strong
 								>
-								<span class="text-muted small"
+								<span class="fg-secondary small"
 									>Lookup cash, credit, or local contactless
 									options.</span
 								>
@@ -93,18 +93,18 @@
 				</div>
 
 				<!-- Glassmorphism Search Console Card -->
-				<div class="col-12 col-md-10 col-lg-6 col-xl-5">
+				<div class="col-12 md:col-10 lg:col-6 xl:col-5">
 					<div
-						class="card glass-card border border-light border-opacity-10 p-2 shadow-lg"
+						class="card glass-card border border-white border-10 p-3 shadow-lg"
 					>
-						<div class="card-body p-4">
-							<h4 class="card-title fw-bold text-center mb-4">
+						<div class="card-body p-7">
+							<h4 class="card-title fw-bold text-center mb-7">
 								Start Your Search
 							</h4>
 
 							<LocationSearchInput
 								v-model="addressInput"
-								class="mb-3"
+								class="mb-5"
 								label="1. Where are you heading?"
 								placeholder="Enter station, address, or city..."
 								:results="geocodeResults"
@@ -122,7 +122,7 @@
 								v-model:slider-value="sliderValue"
 								v-model:hours="durationHours"
 								v-model:minutes="durationMinutes"
-								class="mb-4"
+								class="mb-7"
 								label="2. Stay duration (optional)"
 								:presets="durationPresets"
 								font-size="0.72rem"
@@ -135,11 +135,11 @@
 							<!-- Submit CTA -->
 							<button
 								type="button"
-								class="btn btn-primary btn-lg w-100 py-3 rounded-3 d-flex align-items-center justify-content-center shadow"
+								class="btn btn-subtle theme-primary btn-lg w-100 py-5 rounded-5 d-flex align-items-center justify-content-center shadow"
 								:disabled="!canSearch"
 								@click="triggerSearch"
 							>
-								<span class="material-symbols-outlined me-2"
+								<span class="material-symbols-outlined me-3"
 									>search</span
 								>
 								<span>Search Nearby Parking</span>
@@ -152,14 +152,15 @@
 
 		<!-- Footer -->
 		<footer
-			class="bg-dark text-secondary py-4 text-center mt-auto border-top border-secondary border-opacity-10"
+			class="bg-black fg-secondary py-7 text-center mt-auto border-top border-secondary border-10"
+			data-bs-theme="dark"
 		>
 			<div class="container">
 				<p class="mb-1 small">
 					CyclePark Bike Locator Web Application.
 				</p>
 				<p
-					class="mb-0 text-muted"
+					class="mb-0 fg-secondary"
 					style="font-size: 0.75rem"
 				>
 					Powered by Nuxt, Bootstrap & OpenMapTiles
@@ -170,6 +171,8 @@
 </template>
 
 <script lang="ts" setup>
+	import type { GeocodeResult } from '#shared/types/geocode';
+
 	const router = useRouter();
 
 	// Input states
@@ -183,10 +186,10 @@
 	const searchLng = ref(139.7104);
 
 	// Geocode dropdown states
-	const geocodeResults = ref<any[]>([]);
+	const geocodeResults = ref<GeocodeResult[]>([]);
 	const geocodeLoading = ref(false);
 	const showGeocodeDropdown = ref(false);
-	let geocodeTimeout: any = null;
+	let geocodeTimeout: ReturnType<typeof setTimeout> | null = null;
 
 	const durationPresets = [
 		{ label: '1 Hour', value: 60 },
@@ -213,8 +216,9 @@
 		geocodeTimeout = setTimeout(async () => {
 			geocodeLoading.value = true;
 			try {
-				const queryUrl = `https://nominatim.openstreetmap.org/search?format=json&limit=5&q=${encodeURIComponent(addressInput.value)}`;
-				const response = await $fetch<any[]>(queryUrl);
+				const response = await $fetch<GeocodeResult[]>('/api/geocode', {
+					query: { q: addressInput.value },
+				});
 				geocodeResults.value = response;
 				showGeocodeDropdown.value = true;
 			} catch (e) {
@@ -225,7 +229,7 @@
 		}, 400);
 	};
 
-	const selectAddress = (res: any) => {
+	const selectAddress = (res: GeocodeResult) => {
 		const lat = parseFloat(res.lat);
 		const lng = parseFloat(res.lon);
 
@@ -303,11 +307,11 @@
 </script>
 
 <style lang="scss" scoped>
-	.display-4 {
+	.hero-title {
 		background: linear-gradient(
 			135deg,
-			var(--bs-emphasis-color) 30%,
-			rgba(var(--bs-emphasis-color-rgb), 0.6) 100%
+			var(--bs-fg-body) 30%,
+			color-mix(in oklch, var(--bs-fg-body) 60%, transparent) 100%
 		);
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;

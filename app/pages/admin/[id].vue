@@ -2,38 +2,36 @@
 	<div class="d-flex flex-column min-vh-100 bg-body">
 		<AppNavbar />
 
-		<main class="container py-4 flex-grow-1">
+		<main class="container py-7 flex-grow-1">
 			<div
 				v-if="loading"
-				class="text-center py-5"
+				class="text-center py-12"
 			>
 				<div
-					class="spinner-border text-primary"
+					class="spinner-border fg-primary"
 					role="status"
 				></div>
-				<p class="mt-2 text-secondary mb-0">
-					Loading parking lot...
-				</p>
+				<p class="mt-3 fg-secondary mb-0">Loading parking lot...</p>
 			</div>
 
 			<div
 				v-else-if="!location"
-				class="card shadow border-0 rounded-3"
+				class="card shadow border-0 rounded-5"
 			>
-				<div class="card-body text-center py-5">
+				<div class="card-body text-center py-12">
 					<span
-						class="material-symbols-outlined text-secondary"
+						class="material-symbols-outlined fg-secondary"
 						style="font-size: 3rem"
 					>
 						error
 					</span>
-					<h1 class="h5 mt-3">Parking lot not found</h1>
-					<p class="text-secondary">
+					<h1 class="h5 mt-5">Parking lot not found</h1>
+					<p class="fg-secondary">
 						The selected parking lot may have been deleted.
 					</p>
 					<NuxtLink
 						to="/admin"
-						class="btn btn-primary"
+						class="btn btn-solid theme-primary"
 					>
 						Back to list
 					</NuxtLink>

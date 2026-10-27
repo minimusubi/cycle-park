@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="d-flex justify-content-between align-items-center mb-1">
-			<label class="form-label small fw-semibold text-secondary mb-0">
+			<label class="form-label small fw-semibold fg-secondary mb-0">
 				{{ label }}
 			</label>
 			<div class="d-flex align-items-center">
@@ -14,7 +14,7 @@
 					max="48"
 					@change="onHoursChange"
 				/>
-				<span class="small text-secondary me-2">h</span>
+				<span class="small fg-secondary me-3">h</span>
 				<input
 					:value="minutes"
 					type="number"
@@ -24,7 +24,7 @@
 					max="59"
 					@change="onMinutesChange"
 				/>
-				<span class="small text-secondary">m</span>
+				<span class="small fg-secondary">m</span>
 			</div>
 		</div>
 
@@ -38,16 +38,16 @@
 			@input="onSliderInput"
 		/>
 
-		<div class="d-flex flex-wrap gap-1 mt-2 justify-content-between">
+		<div class="d-flex flex-wrap gap-1 mt-3 justify-content-between">
 			<button
 				v-for="preset in presets"
 				:key="preset.value"
 				type="button"
-				class="btn btn-xs py-0.5 px-2 border rounded-pill text-nowrap"
+				class="btn btn-xs py-1 px-3 border rounded-pill text-nowrap"
 				:class="
 					sliderValue === preset.value ?
-						'btn-primary text-white border-primary'
-					:	'btn-outline-secondary'
+						'btn-subtle theme-primary fg-white border-primary'
+					:	'btn-text theme-secondary'
 				"
 				:style="{ fontSize }"
 				@click="$emit('preset', preset.value)"
